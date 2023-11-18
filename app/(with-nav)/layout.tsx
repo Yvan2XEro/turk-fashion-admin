@@ -24,7 +24,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex-auto">
               <AppToolbar isOpen={isOpen} setIsOpen={setIsOpen} />
-              <main className="container">{children}</main>
+              <main className="p-2">{children}</main>
             </div>
           </div>
         </div>
