@@ -74,3 +74,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-loader {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: conic-gradient(#ffffff 10%, #000000);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  animation: s3 0.5s infinite linear;
+}
+
+@keyframes s3 {
+  to {
+    transform: rotate(1turn)
+  }
+}
+@keyframes s3 {to{transform: rotate(1turn)}}

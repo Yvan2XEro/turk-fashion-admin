@@ -20,10 +20,12 @@ import useEditProductForm from "./useEditProductForm";
 import { Textarea } from "@/components/ui/textarea";
 import { AppPopoverPicker } from "@/components/moleculs/AppPopoverPicker";
 import { SingleImageDropzone } from "@/components/moleculs/SingleImageDropzone";
+import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
 
 export default function EditProductForm() {
   const form = useForm<EditProductFormType>({
     resolver: zodResolver(editProductFormSchema),
+    mode: "onChange",
   });
   const { onSubmit } = useEditProductForm();
   return (
@@ -94,7 +96,7 @@ export default function EditProductForm() {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea {...field} />
+                  <Textarea rows={10} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -105,9 +107,16 @@ export default function EditProductForm() {
             name="photoUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Featured Image</FormLabel>
                 <FormControl>
-                  <SingleImageDropzone height={100} width={100} />
+                  <AppImageField
+                    value={field.value}
+                    onChange={field.onChange}
+                    className="h-36 w-36"
+                    dropzoneOptions={{
+                      maxSize: 1 * 1024 * 1024,
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetTrigger,
@@ -17,7 +16,10 @@ export default function EditProductSheet({ button, children, title }: TProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>{button}</SheetTrigger>
-      <SheetContent side="right">
+      <SheetContent
+        side="right"
+        className="min-w-[90vw] md:min-w-[700px] overflow-y-auto"
+      >
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
         </SheetHeader>

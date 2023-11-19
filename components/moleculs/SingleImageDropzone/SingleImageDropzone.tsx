@@ -17,8 +17,8 @@ const variants = {
 };
 
 type InputProps = {
-  width: number;
-  height: number;
+  // width: number;
+  // height: number;
   className?: string;
   value?: File | string;
   onChange?: (file?: File) => void | Promise<void>;
@@ -42,10 +42,7 @@ const ERROR_MESSAGES = {
 };
 
 const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    { dropzoneOptions, width, height, value, className, disabled, onChange },
-    ref
-  ) => {
+  ({ dropzoneOptions, value, className, disabled, onChange }, ref) => {
     const imageUrl = React.useMemo(() => {
       if (typeof value === "string") {
         // in case a url is passed in, use it to display the image
@@ -124,10 +121,10 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         <div
           {...getRootProps({
             className: dropZoneClassName,
-            style: {
-              width,
-              height,
-            },
+            // style: {
+            //   width,
+            //   height,
+            // },
           })}
         >
           {/* Main File Input */}
