@@ -23,11 +23,11 @@ const menuItems = [
     href: "/products",
     icon: <Box />,
   },
-  //   {
-  //     name: "Categories",
-  //     href: "/categories",
-  //     icon: <Layers />,
-  //   },
+  {
+    name: "Categories",
+    href: "/categories",
+    icon: <Layers />,
+  },
   //   {
   //     name: "Stock Management",
   //     href: "/stock-management",

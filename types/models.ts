@@ -18,6 +18,8 @@ export type Category = {
     uuid: string,
     name: string
     photoUrl: string
+    createdAt: Date
+    updatedAt: Date
 }
 
 export type SubCategory = {
@@ -26,6 +28,8 @@ export type SubCategory = {
     photoUrl: string
     categoryUuid: string
     filters: string[]
+    createdAt: Date
+    updatedAt: Date
 }
 
 export type Filter = {
