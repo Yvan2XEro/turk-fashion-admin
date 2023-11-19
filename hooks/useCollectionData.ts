@@ -22,7 +22,7 @@ export default function useCollectionData<T extends DocumentData = DocumentData>
                     updatedData.push(docData);
                 }
             });
-            updatedData.sort((a, b) => b.updatedAt.toMillis() - a.updatedAt.toMillis());
+            updatedData.sort((a, b) => b.updatedAt?.toMillis() - a.updatedAt?.toMillis());
 
             setData(updatedData);
         });
