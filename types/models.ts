@@ -2,11 +2,11 @@
 export type Product = {
     uuid: string,
     name: string,
+    status: "active" | "inactive",
     categoryUuid: string
     subCategoryUuid: string
     price: number,
     description: string
-
     photoUrl: string
     filters: Record<string, string>
     tags: string[]

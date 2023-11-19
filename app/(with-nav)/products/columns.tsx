@@ -2,6 +2,7 @@
 
 import { EditProductSheet } from "@/components/organism/EditProductForm";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -11,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
+import { updateProductsStatus } from "@/lib/products";
 import { Product } from "@/types/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
@@ -52,7 +54,7 @@ export const columns: ColumnDef<Product>[] = [
                 />
               </Avatar>
               <Label className="cursor-pointer">
-                {props.row.original.name}
+                {props.row.original.name.substring(0, 16) + "..."}
               </Label>
             </button>
           }
@@ -62,9 +64,16 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "price",
-    header: "Price",
+    header: "Status",
+    accessorKey: "status",
+    cell(props) {
+      return <Badge variant="outline">{props.row.original.status}</Badge>;
+    },
   },
+  // {
+  //   accessorKey: "price",
+  //   header: "Price",
+  // },
   {
     header: "Actions",
     cell(props) {
@@ -76,7 +85,23 @@ export const columns: ColumnDef<Product>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>Archive</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await updateProductsStatus([props.row.original.uuid], "active");
+              }}
+            >
+              Activate
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await updateProductsStatus(
+                  [props.row.original.uuid],
+                  "inactive"
+                );
+              }}
+            >
+              Deactivate
+            </DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
