@@ -29,13 +29,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Trash,
+  EyeOff,
 } from "lucide-react";
+import { Alert } from "@/components/ui/alert";
+import { deleteMultipleProducts, updateProductsStatus } from "@/lib/products";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,6 +57,11 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const selecteItems = useMemo(() => {
+    const indices = Object.keys(rowSelection).map((e) => +e);
+
+    return data.filter((_, index) => indices.includes(index));
+  }, [rowSelection, data]);
 
   const table = useReactTable({
     data,
@@ -111,6 +120,49 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      {selecteItems.length > 0 && (
+        <Alert className="flex justify-end gap-2">
+          <Button
+            onClick={async () => {
+              await updateProductsStatus(
+                selecteItems.map((e: any) => e.uuid),
+                "active"
+              );
+              setRowSelection({});
+            }}
+            variant="outline"
+            size="sm"
+          >
+            Activate
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              await updateProductsStatus(
+                selecteItems.map((e: any) => e.uuid),
+                "inactive"
+              );
+              setRowSelection({});
+            }}
+          >
+            Deactivate
+          </Button>
+          <Button
+            onClick={async () => {
+              if (!confirm("Are you sure you want to delete?")) return;
+              await deleteMultipleProducts(
+                selecteItems.map((e: any) => e.uuid)
+              );
+              setRowSelection({});
+            }}
+            variant="destructive"
+            size="sm"
+          >
+            <Trash />
+          </Button>
+        </Alert>
+      )}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

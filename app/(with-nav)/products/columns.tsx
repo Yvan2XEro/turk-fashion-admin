@@ -67,7 +67,15 @@ export const columns: ColumnDef<Product>[] = [
     header: "Status",
     accessorKey: "status",
     cell(props) {
-      return <Badge variant="outline">{props.row.original.status}</Badge>;
+      return (
+        <Badge
+          variant={
+            props.row.original.status === "active" ? "outline" : "destructive"
+          }
+        >
+          {props.row.original.status}
+        </Badge>
+      );
     },
   },
   // {
