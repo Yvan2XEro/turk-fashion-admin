@@ -13,25 +13,20 @@ import { DataTable } from "./data-table";
 import { Product } from "@/types/models";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { EditProductSheet } from "@/components/organism/EditProductSheet";
-import { EditProductForm } from "@/components/organism/EditProductForm";
+import { EditProductSheet } from "@/components/organism/EditProductForm";
+import useCollectionData from "@/hooks/useCollectionData";
 
 const q = query(
   collection(db, "products"),
-  //   orderBy("timestamp", "desc"),
+  orderBy("updatedAt", "desc"),
   limit(10)
 );
 
 export default function page() {
-  const [products, setProducts] = React.useState<Product[]>([]);
-  useEffect(() => {
-    const subscriber = onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        setProducts((oldArray) => [...oldArray, doc.data() as Product]);
-      });
-    });
-    return () => subscriber();
-  }, []);
+  const { data: products } = useCollectionData<Product>({
+    q,
+  });
+
   return (
     <div>
       <div className="mb-2 flex justify-end">
@@ -43,9 +38,7 @@ export default function page() {
               Add Product
             </Button>
           }
-        >
-          <EditProductForm />
-        </EditProductSheet>
+        />
       </div>
       <DataTable columns={columns} data={products} />
     </div>

@@ -6,15 +6,24 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import React from "react";
+import { EditProductForm } from ".";
+import { EditProductFormType } from "./edit-product-form";
 
 type TProps = {
-  children: React.ReactNode;
+  data?: EditProductFormType;
+  uuid?: string;
   button: React.ReactNode;
   title: string;
 };
-export default function EditProductSheet({ button, children, title }: TProps) {
+export default function EditProductSheet({
+  button,
+  data,
+  title,
+  uuid,
+}: TProps) {
+  const [open, setOpen] = React.useState(false);
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>{button}</SheetTrigger>
       <SheetContent
         side="right"
@@ -23,7 +32,11 @@ export default function EditProductSheet({ button, children, title }: TProps) {
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
         </SheetHeader>
-        {children}
+        <EditProductForm
+          onSubmitSuccess={() => setOpen(false)}
+          data={data}
+          uuid={uuid}
+        />
       </SheetContent>
     </Sheet>
   );

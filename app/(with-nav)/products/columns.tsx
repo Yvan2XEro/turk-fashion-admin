@@ -1,7 +1,7 @@
 "use client";
 
+import { EditProductSheet } from "@/components/organism/EditProductForm";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -40,15 +40,24 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "name",
     cell(props) {
       return (
-        <div className="flex items-center space-x-3">
-          <Avatar>
-            <AvatarImage
-              src={props.row.original.photoUrl}
-              alt={props.row.original.name}
-            />
-          </Avatar>
-          <Label>{props.row.original.name}</Label>
-        </div>
+        <EditProductSheet
+          title="Edit product"
+          uuid={props.row.original.uuid}
+          button={
+            <button className="flex items-center space-x-3">
+              <Avatar>
+                <AvatarImage
+                  src={props.row.original.photoUrl}
+                  alt={props.row.original.name}
+                />
+              </Avatar>
+              <Label className="cursor-pointer">
+                {props.row.original.name}
+              </Label>
+            </button>
+          }
+          data={props.row.original}
+        />
       );
     },
   },

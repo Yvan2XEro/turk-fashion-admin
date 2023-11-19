@@ -5,11 +5,13 @@ export type Product = {
     categoryUuid: string
     subCategoryUuid: string
     price: number,
-    description?: string
+    description: string
 
     photoUrl: string
     filters: Record<string, string>
     tags: string[]
+    createdAt: Date
+    updatedAt: Date
 }
 
 export type Category = {
