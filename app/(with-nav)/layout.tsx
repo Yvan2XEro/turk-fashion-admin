@@ -9,7 +9,7 @@ import { useDarkMode } from "usehooks-ts";
 
 const inter = Mulish({ subsets: ["latin"] });
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const { isDarkMode } = useDarkMode();
 
