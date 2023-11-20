@@ -16,11 +16,7 @@ import { Plus } from "lucide-react";
 import { EditProductSheet } from "@/components/organism/EditProductForm";
 import useCollectionData from "@/hooks/useCollectionData";
 
-const q = query(
-  collection(db, "products"),
-  orderBy("updatedAt", "desc"),
-  limit(10)
-);
+const q = query(collection(db, "products"), orderBy("updatedAt", "desc"));
 
 export default function page() {
   const { data: products } = useCollectionData<Product>({

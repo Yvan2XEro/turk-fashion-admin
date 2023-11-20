@@ -10,11 +10,7 @@ import { Plus } from "lucide-react";
 import useCollectionData from "@/hooks/useCollectionData";
 import { EditCategorySheet } from "@/components/organism/EditCategoryForm";
 
-const q = query(
-  collection(db, "categories"),
-  orderBy("updatedAt", "desc"),
-  limit(10)
-);
+const q = query(collection(db, "categories"), orderBy("updatedAt", "desc"));
 // const { data: categories } = useCollectionData<Category>({
 //   q: query(collection(db, "categories")),
 // });

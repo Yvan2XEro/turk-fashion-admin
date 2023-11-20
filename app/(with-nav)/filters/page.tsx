@@ -10,11 +10,7 @@ import { Plus } from "lucide-react";
 import useCollectionData from "@/hooks/useCollectionData";
 import { EditFilterSheet } from "@/components/organism/EditFilterForm";
 
-const q = query(
-  collection(db, "filters"),
-  orderBy("updatedAt", "desc"),
-  limit(10)
-);
+const q = query(collection(db, "filters"), orderBy("updatedAt", "desc"));
 
 export default function page() {
   const { data: categiries } = useCollectionData<Filter>({

@@ -35,6 +35,11 @@ const menuItems = [
     icon: <Layers />,
   },
   {
+    name: "Tags Management",
+    href: "/tags",
+    icon: <Tag />,
+  },
+  {
     name: "Products",
     href: "/products",
     icon: <Box />,
@@ -43,11 +48,6 @@ const menuItems = [
   //     name: "Stock Management",
   //     href: "/stock-management",
   //     icon: <Archive />,
-  //   },
-  //   {
-  //     name: "Tags Management",
-  //     href: "/tags-management",
-  //     icon: <Tag />,
   //   },
   //   {
   //     name: "Orders",

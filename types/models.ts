@@ -40,4 +40,7 @@ export type Filter = {
 
 export type TagObj = {
     label: string
+    uuid: string
+    createdAt: Date
+    updatedAt: Date
 }
