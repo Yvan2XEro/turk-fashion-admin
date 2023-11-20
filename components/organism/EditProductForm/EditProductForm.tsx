@@ -75,7 +75,7 @@ export default function EditProductForm({
       return [];
 
     return filters.filter((f) => subCategoryObj.filters.includes(f.uuid));
-  }, [selectedSubCategoryUuid, filters]);
+  }, [selectedSubCategoryUuid, filters, subCategories]);
 
   const { onSubmit } = useEditProductForm({
     onSubmitSuccess,

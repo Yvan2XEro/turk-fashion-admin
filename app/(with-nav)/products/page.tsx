@@ -18,7 +18,7 @@ import useCollectionData from "@/hooks/useCollectionData";
 
 const q = query(collection(db, "products"), orderBy("updatedAt", "desc"));
 
-export default function page() {
+export default function Page() {
   const { data: products } = useCollectionData<Product>({
     q,
   });

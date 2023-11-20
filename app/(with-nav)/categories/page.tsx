@@ -15,7 +15,7 @@ const q = query(collection(db, "categories"), orderBy("updatedAt", "desc"));
 //   q: query(collection(db, "categories")),
 // });
 
-export default function page() {
+export default function Page() {
   const { data: categiries } = useCollectionData<Category>({
     q,
   });

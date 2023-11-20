@@ -12,7 +12,7 @@ import { EditSubCategorySheet } from "@/components/organism/EditSubCategoryForm"
 
 const q = query(collection(db, "subcategories"), orderBy("updatedAt", "desc"));
 
-export default function page() {
+export default function Page() {
   const { data: categiries } = useCollectionData<SubCategory>({
     q,
   });

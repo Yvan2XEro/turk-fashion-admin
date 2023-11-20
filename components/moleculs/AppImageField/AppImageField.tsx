@@ -27,10 +27,9 @@ function AppImageField(props: InputProps, ref: any) {
         setValue(url);
         setLoading(false);
         props.onChange?.(url);
-        console.log("Success!!!");
       })();
     }
-  }, [value]);
+  }, [value, setLoading, props, setValue]);
   return (
     <>
       {!loading ? (

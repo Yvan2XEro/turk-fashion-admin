@@ -12,7 +12,7 @@ import EditTagSheet from "@/components/organism/EditTagForm/EditTagSheet";
 
 const q = query(collection(db, "tags"), orderBy("updatedAt", "desc"));
 
-export default function page() {
+export default function Page() {
   const { data: tags } = useCollectionData<TagObj>({
     q,
   });

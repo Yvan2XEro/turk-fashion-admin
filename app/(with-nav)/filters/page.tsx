@@ -12,7 +12,7 @@ import { EditFilterSheet } from "@/components/organism/EditFilterForm";
 
 const q = query(collection(db, "filters"), orderBy("updatedAt", "desc"));
 
-export default function page() {
+export default function Page() {
   const { data: categiries } = useCollectionData<Filter>({
     q,
   });
