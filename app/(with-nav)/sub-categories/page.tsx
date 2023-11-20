@@ -4,35 +4,32 @@ import { collection, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { Category } from "@/types/models";
+import { Filter, SubCategory } from "@/types/models";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import useCollectionData from "@/hooks/useCollectionData";
-import { EditCategorySheet } from "@/components/organism/EditCategoryForm";
+import { EditSubCategorySheet } from "@/components/organism/EditSubCategoryForm";
 
 const q = query(
-  collection(db, "categories"),
+  collection(db, "subcategories"),
   orderBy("updatedAt", "desc"),
   limit(10)
 );
-// const { data: categories } = useCollectionData<Category>({
-//   q: query(collection(db, "categories")),
-// });
 
 export default function page() {
-  const { data: categiries } = useCollectionData<Category>({
+  const { data: categiries } = useCollectionData<SubCategory>({
     q,
   });
 
   return (
     <div>
       <div className="mb-2 flex justify-end">
-        <EditCategorySheet
+        <EditSubCategorySheet
           title="New Category"
           button={
             <Button size="sm" variant="ghost" className="">
               <Plus />
-              Add Category
+              Add Sub Category
             </Button>
           }
         />

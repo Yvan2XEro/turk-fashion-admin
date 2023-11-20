@@ -20,11 +20,6 @@ const menuItems = [
     icon: <LayoutDashboard />,
   },
   {
-    name: "Products",
-    href: "/products",
-    icon: <Box />,
-  },
-  {
     name: "Categories",
     href: "/categories",
     icon: <Layers />,
@@ -33,6 +28,16 @@ const menuItems = [
     name: "Filters",
     href: "/filters",
     icon: <ListFilter />,
+  },
+  {
+    name: "Sub-Categories",
+    href: "/sub-categories",
+    icon: <Layers />,
+  },
+  {
+    name: "Products",
+    href: "/products",
+    icon: <Box />,
   },
   //   {
   //     name: "Stock Management",

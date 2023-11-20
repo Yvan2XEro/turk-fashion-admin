@@ -40,7 +40,7 @@ export const columns: ColumnDef<Filter>[] = [
   },
   {
     header: "Name",
-    accessorKey: "name",
+    accessorKey: "label",
     cell(props) {
       return (
         <EditFilterSheet

@@ -36,21 +36,20 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Trash,
-  EyeOff,
 } from "lucide-react";
 import { Alert } from "@/components/ui/alert";
-import { deleteMultipleFilters } from "@/lib/filters";
-import { Filter } from "@/types/models";
+import { SubCategory } from "@/types/models";
+import { deleteMultipleSubCategories } from "@/lib/subcategories";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<Filter, TValue>[];
-  data: Filter[];
+  columns: ColumnDef<SubCategory, TValue>[];
+  data: SubCategory[];
 }
 
-export function DataTable<Filter, TValue>({
+export function DataTable<SubCategory, TValue>({
   columns,
   data,
-}: DataTableProps<Filter, TValue>) {
+}: DataTableProps<SubCategory, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -87,10 +86,10 @@ export function DataTable<Filter, TValue>({
     <div className="rounded-md border">
       <div className="flex items-center p-4 gap-2">
         <Input
-          placeholder="Filter name..."
-          value={(table.getColumn("label")?.getFilterValue() as string) ?? ""}
+          placeholder="SubCategory name..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("label")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -126,7 +125,9 @@ export function DataTable<Filter, TValue>({
           <Button
             onClick={async () => {
               if (!confirm("Are you sure you want to delete?")) return;
-              await deleteMultipleFilters(selecteItems.map((e: any) => e.uuid));
+              await deleteMultipleSubCategories(
+                selecteItems.map((e: any) => e.uuid)
+              );
               setRowSelection({});
             }}
             variant="destructive"

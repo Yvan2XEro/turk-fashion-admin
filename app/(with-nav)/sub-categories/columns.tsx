@@ -1,8 +1,7 @@
 "use client";
 
-import { EditProductSheet } from "@/components/organism/EditProductForm";
+import { EditSubCategorySheet } from "@/components/organism/EditSubCategoryForm";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -12,12 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
-import { deleteMultipleProducts, updateProductsStatus } from "@/lib/products";
-import { Product } from "@/types/models";
+import { deleteMultipleSubCategories } from "@/lib/subcategories";
+import { SubCategory } from "@/types/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<SubCategory>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -42,8 +41,8 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "name",
     cell(props) {
       return (
-        <EditProductSheet
-          title="Edit product"
+        <EditSubCategorySheet
+          title="Edit Sub Category"
           uuid={props.row.original.uuid}
           button={
             <button className="flex items-center space-x-3">
@@ -64,25 +63,6 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    header: "Status",
-    accessorKey: "status",
-    cell(props) {
-      return (
-        <Badge
-          variant={
-            props.row.original.status === "active" ? "outline" : "destructive"
-          }
-        >
-          {props.row.original.status}
-        </Badge>
-      );
-    },
-  },
-  {
-    accessorKey: "price",
-    header: "Price",
-  },
-  {
     header: "Actions",
     cell(props) {
       return (
@@ -95,26 +75,9 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={async () => {
-                await updateProductsStatus([props.row.original.uuid], "active");
-              }}
-            >
-              Activate
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={async () => {
-                await updateProductsStatus(
-                  [props.row.original.uuid],
-                  "inactive"
-                );
-              }}
-            >
-              Deactivate
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={async () => {
                 if (!confirm("Are you sure you want to delete this item?"))
                   return;
-                await deleteMultipleProducts([props.row.original.uuid]);
+                await deleteMultipleSubCategories([props.row.original.uuid]);
               }}
             >
               Delete

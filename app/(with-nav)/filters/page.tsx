@@ -12,12 +12,9 @@ import { EditFilterSheet } from "@/components/organism/EditFilterForm";
 
 const q = query(
   collection(db, "filters"),
-  // orderBy("updatedAt", "desc"),
+  orderBy("updatedAt", "desc"),
   limit(10)
 );
-// const { data: categories } = useCollectionData<Category>({
-//   q: query(collection(db, "categories")),
-// });
 
 export default function page() {
   const { data: categiries } = useCollectionData<Filter>({
@@ -28,7 +25,7 @@ export default function page() {
     <div>
       <div className="mb-2 flex justify-end">
         <EditFilterSheet
-          title="New Category"
+          title="New Filter"
           button={
             <Button size="sm" variant="ghost" className="">
               <Plus />
