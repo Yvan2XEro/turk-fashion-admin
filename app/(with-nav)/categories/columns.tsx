@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
+import { deleteMultipleCategories } from "@/lib/categories";
 import { updateProductsStatus } from "@/lib/products";
 import { Category } from "@/types/models";
 import { ColumnDef } from "@tanstack/react-table";
@@ -79,7 +80,15 @@ export const columns: ColumnDef<Category>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                if (!confirm("Are you sure you want to delete this item?"))
+                  return;
+                await deleteMultipleCategories([props.row.original.uuid]);
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

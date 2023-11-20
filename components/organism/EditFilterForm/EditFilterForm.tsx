@@ -10,16 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import {
-  EditCategoryFormType,
-  editCategoryFormSchema,
-} from "./edit-category-form";
-import useEditProductForm from "./useEditCategoryForm";
-import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
+import React, { useMemo } from "react";
+import { EditFilterFormType, editFilterFormSchema } from "./edit-filter-form";
+import useEditFilterForm from "./useEditFilterForm";
+import { AppTagsInput2 } from "@/components/moleculs/AppTagsInput";
 
 type TProps = {
-  data?: EditCategoryFormType;
+  data?: EditFilterFormType;
   uuid?: string;
   onSubmitSuccess: () => void;
 };
@@ -28,56 +25,53 @@ export default function EditCategoryForm({
   onSubmitSuccess,
   uuid,
 }: TProps) {
-  const form = useForm<EditCategoryFormType>({
-    resolver: zodResolver(editCategoryFormSchema),
+  const form = useForm<EditFilterFormType>({
+    resolver: zodResolver(editFilterFormSchema),
     mode: "onChange",
     defaultValues: {
       ...data,
     },
   });
 
-  const { onSubmit } = useEditProductForm({
+  const { onSubmit } = useEditFilterForm({
     onSubmitSuccess,
     uuid,
   });
+
   return (
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="name"
+            name="label"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Filter name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="Ex: Size, Color" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
-            name="photoUrl"
+            name="values"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Featured Image</FormLabel>
+                <FormLabel>Values</FormLabel>
                 <FormControl>
-                  <AppImageField
-                    value={field.value}
-                    onChange={field.onChange}
-                    className="h-36 w-36"
-                    dropzoneOptions={{
-                      maxSize: 1 * 1024 * 1024,
-                    }}
+                  <AppTagsInput2
+                    tags={field.value || []}
+                    onTagsChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <Button type="submit">Submit</Button>
         </form>
       </Form>

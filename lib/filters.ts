@@ -1,19 +1,19 @@
 import { writeBatch, doc } from "firebase/firestore";
 import { db } from "./firebase";
 
-export async function deleteMultipleCategories(uuids: string[]): Promise<void> {
+export async function deleteMultipleFilters(uuids: string[]): Promise<void> {
     const batch = writeBatch(db);;
 
     try {
         for (const uuid of uuids) {
-            const categoryRef = doc(db, "categories", uuid);
+            const categoryRef = doc(db, "filters", uuid);
             batch.delete(categoryRef);
         }
 
         await batch.commit();
-        console.log("Categories deleted successfully!");
+        console.log("Filters deleted successfully!");
     } catch (error) {
-        console.error("Error deleting categories:", error);
+        console.error("Error deleting filters:", error);
         throw error; // You can handle the error as needed
     }
 }

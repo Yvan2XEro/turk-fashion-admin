@@ -1,7 +1,7 @@
 "use client";
 
-import { EditProductSheet } from "@/components/organism/EditProductForm";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { EditCategorySheet } from "@/components/organism/EditCategoryForm";
+import { EditFilterSheet } from "@/components/organism/EditFilterForm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -12,12 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
-import { deleteMultipleProducts, updateProductsStatus } from "@/lib/products";
-import { Product } from "@/types/models";
+import { deleteMultipleCategories } from "@/lib/categories";
+import { deleteMultipleFilters } from "@/lib/filters";
+import { Filter } from "@/types/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<Filter>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -42,19 +43,13 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "name",
     cell(props) {
       return (
-        <EditProductSheet
-          title="Edit product"
+        <EditFilterSheet
+          title="Edit Filter"
           uuid={props.row.original.uuid}
           button={
             <button className="flex items-center space-x-3">
-              <Avatar>
-                <AvatarImage
-                  src={props.row.original.photoUrl}
-                  alt={props.row.original.name}
-                />
-              </Avatar>
               <Label className="cursor-pointer">
-                {props.row.original.name.substring(0, 16) + "..."}
+                {props.row.original.label}
               </Label>
             </button>
           }
@@ -64,24 +59,20 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    header: "Status",
-    accessorKey: "status",
+    header: "Values",
+    accessorKey: "values",
     cell(props) {
       return (
-        <Badge
-          variant={
-            props.row.original.status === "active" ? "outline" : "destructive"
-          }
-        >
-          {props.row.original.status}
-        </Badge>
+        <div className="flex flex-wrap gap-2">
+          {props.row.original.values.map((value) => (
+            <Badge key={value} variant="outline">
+              {value}
+            </Badge>
+          ))}
+        </div>
       );
     },
   },
-  // {
-  //   accessorKey: "price",
-  //   header: "Price",
-  // },
   {
     header: "Actions",
     cell(props) {
@@ -95,26 +86,9 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={async () => {
-                await updateProductsStatus([props.row.original.uuid], "active");
-              }}
-            >
-              Activate
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={async () => {
-                await updateProductsStatus(
-                  [props.row.original.uuid],
-                  "inactive"
-                );
-              }}
-            >
-              Deactivate
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={async () => {
                 if (!confirm("Are you sure you want to delete this item?"))
                   return;
-                await deleteMultipleProducts([props.row.original.uuid]);
+                await deleteMultipleFilters([props.row.original.uuid]);
               }}
             >
               Delete

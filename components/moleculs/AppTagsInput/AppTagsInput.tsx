@@ -7,16 +7,13 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { CaretSortIcon } from "@radix-ui/react-icons";
-import { CheckIcon } from "lucide-react";
-import React, { useState, ChangeEvent, KeyboardEvent, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 
 interface AppTagsInputProps {
   tags?: string[];
