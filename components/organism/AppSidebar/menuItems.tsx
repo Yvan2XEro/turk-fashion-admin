@@ -10,6 +10,7 @@ import {
   Stars,
   Tag,
   Users,
+  ListFilter,
 } from "lucide-react";
 
 const menuItems = [
@@ -19,24 +20,34 @@ const menuItems = [
     icon: <LayoutDashboard />,
   },
   {
+    name: "Categories",
+    href: "/categories",
+    icon: <Layers />,
+  },
+  {
+    name: "Filters",
+    href: "/filters",
+    icon: <ListFilter />,
+  },
+  {
+    name: "Sub-Categories",
+    href: "/sub-categories",
+    icon: <Layers />,
+  },
+  {
+    name: "Tags Management",
+    href: "/tags",
+    icon: <Tag />,
+  },
+  {
     name: "Products",
     href: "/products",
     icon: <Box />,
   },
   //   {
-  //     name: "Categories",
-  //     href: "/categories",
-  //     icon: <Layers />,
-  //   },
-  //   {
   //     name: "Stock Management",
   //     href: "/stock-management",
   //     icon: <Archive />,
-  //   },
-  //   {
-  //     name: "Tags Management",
-  //     href: "/tags-management",
-  //     icon: <Tag />,
   //   },
   //   {
   //     name: "Orders",

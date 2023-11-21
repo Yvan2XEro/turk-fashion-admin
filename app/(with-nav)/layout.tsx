@@ -9,7 +9,7 @@ import { useDarkMode } from "usehooks-ts";
 
 const inter = Mulish({ subsets: ["latin"] });
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const { isDarkMode } = useDarkMode();
 
@@ -24,7 +24,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex-auto">
               <AppToolbar isOpen={isOpen} setIsOpen={setIsOpen} />
-              <main className="container">{children}</main>
+              <main className="p-2">{children}</main>
             </div>
           </div>
         </div>

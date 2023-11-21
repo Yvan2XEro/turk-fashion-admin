@@ -1,42 +1,36 @@
 "use client";
-import React, { useEffect } from "react";
-import {
-  collection,
-  query,
-  orderBy,
-  limit,
-  onSnapshot,
-} from "firebase/firestore";
+import React from "react";
+import { collection, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { Product } from "@/types/models";
+import { TagObj } from "@/types/models";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { EditProductSheet } from "@/components/organism/EditProductForm";
 import useCollectionData from "@/hooks/useCollectionData";
+import EditTagSheet from "@/components/organism/EditTagForm/EditTagSheet";
 
-const q = query(collection(db, "products"), orderBy("updatedAt", "desc"));
+const q = query(collection(db, "tags"), orderBy("updatedAt", "desc"));
 
 export default function Page() {
-  const { data: products } = useCollectionData<Product>({
+  const { data: tags } = useCollectionData<TagObj>({
     q,
   });
 
   return (
     <div>
       <div className="mb-2 flex justify-end">
-        <EditProductSheet
-          title="New product"
+        <EditTagSheet
+          title="New Filter"
           button={
             <Button size="sm" variant="ghost" className="">
               <Plus />
-              Add Product
+              Add Tag
             </Button>
           }
         />
       </div>
-      <DataTable columns={columns} data={products} />
+      <DataTable columns={columns} data={tags} />
     </div>
   );
 }
