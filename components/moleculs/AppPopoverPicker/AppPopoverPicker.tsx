@@ -17,9 +17,9 @@ import { CheckIcon, CaretSortIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 type TProps = {
-  options: { label: string; value: string }[];
-  onSelect: (value: string) => void;
-  value?: string;
+  options: { label: string; value: number }[];
+  onSelect: (value: number) => void;
+  value?: number;
 };
 export default function AppPopoverPicker({ onSelect, options, value }: TProps) {
   const [open, setOpen] = React.useState(false);

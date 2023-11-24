@@ -1,10 +1,16 @@
+export type DefaultObject = {
+    id: number
+    createdAt: string
+    updatedAt: string
+}
+
 
 export type Product = {
-    uuid: string,
+    id: string,
     name: string,
     status: "active" | "inactive",
-    categoryUuid: string
-    subCategoryUuid: string
+    categoryid: string
+    subCategoryid: string
     price: number,
     description: string
     photoUrl: string
@@ -15,7 +21,7 @@ export type Product = {
 }
 
 export type Category = {
-    uuid: string,
+    id: string,
     name: string
     photoUrl: string
     createdAt: Date
@@ -23,10 +29,10 @@ export type Category = {
 }
 
 export type SubCategory = {
-    uuid: string,
+    id: string,
     name: string
     photoUrl: string
-    categoryUuid: string
+    categoryid: string
     filters: string[]
     createdAt: Date
     updatedAt: Date
@@ -35,12 +41,12 @@ export type SubCategory = {
 export type Filter = {
     label: string
     values: string[]
-    uuid: string
+    id: string
 }
 
 export type TagObj = {
     label: string
-    uuid: string
+    id: string
     createdAt: Date
     updatedAt: Date
 }

@@ -11,16 +11,11 @@ import { EditProductFormType } from "./edit-product-form";
 
 type TProps = {
   data?: EditProductFormType;
-  uuid?: string;
+  id?: number;
   button: React.ReactNode;
   title: string;
 };
-export default function EditProductSheet({
-  button,
-  data,
-  title,
-  uuid,
-}: TProps) {
+export default function EditProductSheet({ button, data, title, id }: TProps) {
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -35,7 +30,7 @@ export default function EditProductSheet({
         <EditProductForm
           onSubmitSuccess={() => setOpen(false)}
           data={data}
-          uuid={uuid}
+          id={id}
         />
       </SheetContent>
     </Sheet>

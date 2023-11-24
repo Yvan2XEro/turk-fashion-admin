@@ -5,10 +5,10 @@ import { useState } from "react";
 
 type TProps = {
     onSubmitSuccess: () => void;
-    uuid?: string;
+    id?: number;
 };
 
-export default function useEditProductForm({ onSubmitSuccess, uuid }: TProps) {
+export default function useEditProductForm({ onSubmitSuccess, id }: TProps) {
     const [loading, setLoading] = useState(false);
 
     async function onSubmit(data: EditProductFormType) {
@@ -20,8 +20,8 @@ export default function useEditProductForm({ onSubmitSuccess, uuid }: TProps) {
                 updatedAt: new Date(),
             };
 
-            if (!!uuid) {
-                await updateDoc(doc(db, "products", uuid), commonData);
+            if (!!id) {
+                await updateDoc(doc(db, "products", id), commonData);
             } else {
                 const payload = {
                     ...commonData,
@@ -31,7 +31,7 @@ export default function useEditProductForm({ onSubmitSuccess, uuid }: TProps) {
                 const ref = await addDoc(collection(db, "products"), payload);
 
                 await setDoc(ref, {
-                    uuid: ref.id,
+                    id: ref.id,
                     ...payload,
                 });
             }

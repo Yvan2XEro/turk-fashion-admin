@@ -7,16 +7,16 @@ import {
 } from "@/components/ui/sheet";
 import React from "react";
 
-import { EditFilterFormType } from "./edit-filter-form";
 import { EditFilterForm } from ".";
+import { FilterPayload } from "@/lib/api/filters";
 
 type TProps = {
-  data?: EditFilterFormType;
-  uuid?: string;
+  data?: FilterPayload;
+  id?: number;
   button: React.ReactNode;
   title: string;
 };
-export default function EditFilterSheet({ button, data, title, uuid }: TProps) {
+export default function EditFilterSheet({ button, data, title, id }: TProps) {
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -31,7 +31,7 @@ export default function EditFilterSheet({ button, data, title, uuid }: TProps) {
         <EditFilterForm
           onSubmitSuccess={() => setOpen(false)}
           data={data}
-          uuid={uuid}
+          id={id}
         />
       </SheetContent>
     </Sheet>

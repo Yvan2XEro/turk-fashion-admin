@@ -6,8 +6,8 @@ export const editProductFormSchema = z.object({
     // price: z.preprocess((a) => parseInt(z.string().parse(a), 10), z.number().positive()),
     description: z.string().default(""),
     photoUrl: z.string(),
-    categoryUuid: z.string(),
-    subCategoryUuid: z.string(),
+    categoryid: z.string(),
+    subCategoryid: z.string(),
     filters: z.record(z.string()).default({}),
     tags: z.array(z.string()),
 })

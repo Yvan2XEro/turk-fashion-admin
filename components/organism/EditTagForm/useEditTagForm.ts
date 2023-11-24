@@ -5,10 +5,10 @@ import { useState } from "react";
 
 type TProps = {
     onSubmitSuccess: () => void;
-    uuid?: string;
+    id?: number;
 };
 
-export default function useEditTagForm({ onSubmitSuccess, uuid }: TProps) {
+export default function useEditTagForm({ onSubmitSuccess, id }: TProps) {
     const [loading, setLoading] = useState(false);
 
     async function onSubmit(data: EditTagFormType) {
@@ -20,8 +20,8 @@ export default function useEditTagForm({ onSubmitSuccess, uuid }: TProps) {
                 updatedAt: new Date(),
             };
 
-            if (!!uuid) {
-                await updateDoc(doc(db, "tags", uuid), commonData);
+            if (!!id) {
+                await updateDoc(doc(db, "tags", id), commonData);
             } else {
                 const payload = {
                     ...commonData,
@@ -31,7 +31,7 @@ export default function useEditTagForm({ onSubmitSuccess, uuid }: TProps) {
                 const ref = await addDoc(collection(db, "tags"), payload);
 
                 await setDoc(ref, {
-                    uuid: ref.id,
+                    id: ref.id,
                     ...payload,
                 });
             }

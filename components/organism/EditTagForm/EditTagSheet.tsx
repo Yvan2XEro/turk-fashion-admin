@@ -12,11 +12,11 @@ import { EditTagForm } from ".";
 
 type TProps = {
   data?: EditTagFormType;
-  uuid?: string;
+  id?: number;
   button: React.ReactNode;
   title: string;
 };
-export default function EditTagSheet({ button, data, title, uuid }: TProps) {
+export default function EditTagSheet({ button, data, title, id }: TProps) {
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -31,7 +31,7 @@ export default function EditTagSheet({ button, data, title, uuid }: TProps) {
         <EditTagForm
           onSubmitSuccess={() => setOpen(false)}
           data={data}
-          uuid={uuid}
+          id={id}
         />
       </SheetContent>
     </Sheet>

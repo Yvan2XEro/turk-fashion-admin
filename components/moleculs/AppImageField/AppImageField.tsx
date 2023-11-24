@@ -5,6 +5,11 @@ import { DropzoneOptions } from "react-dropzone";
 import { SingleImageDropzone } from "../SingleImageDropzone";
 import { uploadImageToFirebase } from "@/lib/upload";
 import { AppLoader } from "../AppLoader";
+import { fetchWithAuth } from "@/lib/api/app-fetch";
+import { upload } from "@/lib/api/images";
+import { useMutation } from "@tanstack/react-query";
+import { useToast } from "@/components/ui/use-toast";
+
 type InputProps = {
   // width: number;
   // height: number;
@@ -14,25 +19,35 @@ type InputProps = {
   disabled?: boolean;
   dropzoneOptions?: Omit<DropzoneOptions, "disabled">;
 };
+
 function AppImageField(props: InputProps, ref: any) {
+  const { toast } = useToast();
+  const uploadMutation = useMutation({
+    mutationFn: (file: File) => upload(file),
+    onSuccess: (data) => {
+      props.onChange?.(data.url);
+      setValue(data.url);
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Unable to upload image",
+      });
+    },
+  });
   const [value, setValue] = React.useState<File | string | undefined>(
     props.value
   );
-  const [loading, setLoading] = React.useState(false);
   useEffect(() => {
     if (value instanceof File) {
       (async () => {
-        setLoading(true);
-        const url = await uploadImageToFirebase(value);
-        setValue(url);
-        setLoading(false);
-        props.onChange?.(url);
+        await uploadMutation.mutateAsync(value);
       })();
     }
-  }, [value, setLoading, props, setValue]);
+  }, [value]);
   return (
     <>
-      {!loading ? (
+      {!uploadMutation.isPending ? (
         <SingleImageDropzone
           {...props}
           ref={ref}

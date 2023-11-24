@@ -11,34 +11,31 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import {
-  EditCategoryFormType,
-  editCategoryFormSchema,
-} from "./edit-category-form";
 import useEditProductForm from "./useEditCategoryForm";
 import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
+import { CategoryPayload, categorySchema } from "@/lib/api/categories";
 
 type TProps = {
-  data?: EditCategoryFormType;
-  uuid?: string;
+  data?: CategoryPayload;
+  id?: number;
   onSubmitSuccess: () => void;
 };
 export default function EditCategoryForm({
   data,
   onSubmitSuccess,
-  uuid,
+  id,
 }: TProps) {
-  const form = useForm<EditCategoryFormType>({
-    resolver: zodResolver(editCategoryFormSchema),
+  const form = useForm<CategoryPayload>({
+    resolver: zodResolver(categorySchema),
     mode: "onChange",
     defaultValues: {
       ...data,
     },
   });
 
-  const { onSubmit } = useEditProductForm({
+  const { onSubmit, isPending } = useEditProductForm({
     onSubmitSuccess,
-    uuid,
+    id,
   });
   return (
     <div>

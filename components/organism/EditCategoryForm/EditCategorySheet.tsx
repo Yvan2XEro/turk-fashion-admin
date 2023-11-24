@@ -7,21 +7,16 @@ import {
 } from "@/components/ui/sheet";
 import React from "react";
 
-import { EditCategoryFormType } from "./edit-category-form";
 import { EditCategoryForm } from ".";
+import { CategoryPayload } from "@/lib/api/categories";
 
 type TProps = {
-  data?: EditCategoryFormType;
-  uuid?: string;
+  data?: CategoryPayload;
+  id?: number;
   button: React.ReactNode;
   title: string;
 };
-export default function EditCategorySheet({
-  button,
-  data,
-  title,
-  uuid,
-}: TProps) {
+export default function EditCategorySheet({ button, data, title, id }: TProps) {
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -36,7 +31,7 @@ export default function EditCategorySheet({
         <EditCategoryForm
           onSubmitSuccess={() => setOpen(false)}
           data={data}
-          uuid={uuid}
+          id={id}
         />
       </SheetContent>
     </Sheet>

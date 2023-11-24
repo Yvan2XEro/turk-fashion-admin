@@ -27,14 +27,10 @@ import { Category, Filter, SubCategory, TagObj } from "@/types/models";
 
 type TProps = {
   data?: EditProductFormType;
-  uuid?: string;
+  id?: number;
   onSubmitSuccess: () => void;
 };
-export default function EditProductForm({
-  data,
-  onSubmitSuccess,
-  uuid,
-}: TProps) {
+export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
   const form = useForm<EditProductFormType>({
     resolver: zodResolver(editProductFormSchema),
     mode: "onChange",
@@ -59,27 +55,27 @@ export default function EditProductForm({
     q: query(collection(db, "tags")),
   });
 
-  const selectedCategoryUuid = form.watch("categoryUuid");
-  const selectedSubCategoryUuid = form.watch("subCategoryUuid");
+  const selectedCategoryid = form.watch("categoryid");
+  const selectedSubCategoryid = form.watch("subCategoryid");
 
   const filtersToDisplay = useMemo(() => {
     const subCategoryObj = subCategories.find(
-      (s) => s.uuid === selectedSubCategoryUuid
+      (s) => s.id === selectedSubCategoryid
     );
     if (
       !filters ||
-      !selectedSubCategoryUuid ||
+      !selectedSubCategoryid ||
       !subCategoryObj ||
       !subCategoryObj.filters
     )
       return [];
 
-    return filters.filter((f) => subCategoryObj.filters.includes(f.uuid));
-  }, [selectedSubCategoryUuid, filters, subCategories]);
+    return filters.filter((f) => subCategoryObj.filters.includes(f.id));
+  }, [selectedSubCategoryid, filters, subCategories]);
 
   const { onSubmit } = useEditProductForm({
     onSubmitSuccess,
-    uuid,
+    id,
   });
   return (
     <div>
@@ -100,7 +96,7 @@ export default function EditProductForm({
           />
           <FormField
             control={form.control}
-            name="categoryUuid"
+            name="categoryid"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Category</FormLabel>
@@ -108,11 +104,11 @@ export default function EditProductForm({
                   value={field.value}
                   options={categories.map((c) => ({
                     label: c.name,
-                    value: c.uuid,
+                    value: c.id,
                   }))}
                   onSelect={(value) => {
-                    form.setValue("categoryUuid", value);
-                    form.resetField("subCategoryUuid");
+                    form.setValue("categoryid", value);
+                    form.resetField("subCategoryid");
                   }}
                 />
                 <FormMessage />
@@ -122,19 +118,19 @@ export default function EditProductForm({
 
           <FormField
             control={form.control}
-            name="subCategoryUuid"
+            name="subCategoryid"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Sub Category</FormLabel>
                 <AppPopoverPicker
                   value={field.value}
                   options={subCategories
-                    .filter((s) => s.categoryUuid === selectedCategoryUuid)
+                    .filter((s) => s.categoryid === selectedCategoryid)
                     .map((c) => ({
                       label: c.name,
-                      value: c.uuid,
+                      value: c.id,
                     }))}
-                  onSelect={(value) => form.setValue("subCategoryUuid", value)}
+                  onSelect={(value) => form.setValue("subCategoryid", value)}
                 />
                 <FormMessage />
               </FormItem>
@@ -143,13 +139,13 @@ export default function EditProductForm({
           {filtersToDisplay.map((filter) => (
             <FormField
               control={form.control}
-              key={filter.uuid}
+              key={filter.id}
               name="filters"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>{filter.label}:</FormLabel>
                   <AppPopoverPicker
-                    value={field.value?.[filter.uuid]}
+                    value={field.value?.[filter.id]}
                     options={filter.values.map((val) => ({
                       label: val,
                       value: val,
@@ -157,7 +153,7 @@ export default function EditProductForm({
                     onSelect={(value) =>
                       form.setValue("filters", {
                         ...field.value,
-                        [filter.uuid]: value,
+                        [filter.id]: value,
                       })
                     }
                   />

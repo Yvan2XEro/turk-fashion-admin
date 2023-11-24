@@ -16,13 +16,13 @@ import useEditTagForm from "./useEditTagForm";
 
 type TProps = {
   data?: EditTagFormType;
-  uuid?: string;
+  id?: number;
   onSubmitSuccess: () => void;
 };
 export default function EditCategoryForm({
   data,
   onSubmitSuccess,
-  uuid,
+  id,
 }: TProps) {
   const form = useForm<EditTagFormType>({
     resolver: zodResolver(editTagFormSchema),
@@ -34,7 +34,7 @@ export default function EditCategoryForm({
 
   const { onSubmit } = useEditTagForm({
     onSubmitSuccess,
-    uuid,
+    id,
   });
 
   return (

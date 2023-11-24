@@ -14,7 +14,7 @@ export default function useCollectionData<T extends DocumentData = DocumentData>
 
             querySnapshot.forEach((doc) => {
                 const docData = doc.data() as T;
-                const existingProductIndex = updatedData.findIndex((item) => item.uuid === docData.uuid);
+                const existingProductIndex = updatedData.findIndex((item) => item.id === docData.id);
 
                 if (existingProductIndex !== -1) {
                     updatedData[existingProductIndex] = docData;

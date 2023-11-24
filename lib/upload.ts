@@ -1,6 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "./firebase";
-import { v4 } from "uuid";
+import { v4 } from "id";
 
 const uploadImageToFirebase = async (file: File): Promise<string> => {
     const storageRef = ref(storage, `images/${v4()}${file.name}`);

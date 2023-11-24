@@ -7,12 +7,12 @@ import {
 } from "@/components/ui/sheet";
 import React from "react";
 
-import { EditSubCategoryFormType } from "./form-props";
 import { EditSubCategoryForm } from ".";
+import { SubCategoryPayload } from "@/lib/api/sub-categories";
 
 type TProps = {
-  data?: EditSubCategoryFormType;
-  uuid?: string;
+  data?: SubCategoryPayload;
+  id?: number;
   button: React.ReactNode;
   title: string;
 };
@@ -20,7 +20,7 @@ export default function EditSubCategorySheet({
   button,
   data,
   title,
-  uuid,
+  id,
 }: TProps) {
   const [open, setOpen] = React.useState(false);
   return (
@@ -36,7 +36,7 @@ export default function EditSubCategorySheet({
         <EditSubCategoryForm
           onSubmitSuccess={() => setOpen(false)}
           data={data}
-          uuid={uuid}
+          id={id}
         />
       </SheetContent>
     </Sheet>
