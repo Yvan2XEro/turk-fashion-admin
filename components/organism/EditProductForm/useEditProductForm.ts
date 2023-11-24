@@ -1,7 +1,7 @@
-import { db } from "@/lib/firebase";
-import { EditProductFormType } from "./edit-product-form";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { ProductPayload } from "@/lib/api/products";
+import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type TProps = {
     onSubmitSuccess: () => void;
@@ -9,42 +9,47 @@ type TProps = {
 };
 
 export default function useEditProductForm({ onSubmitSuccess, id }: TProps) {
-    const [loading, setLoading] = useState(false);
+    const { toast } = useToast()
+    const client = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: (payload: ProductPayload) => !id ? universalCreate({
+            path: `/products`,
+            payload
+        }) : universalUpdate<ProductPayload>({
+            path: `/products`,
+            id,
+            payload
+        }),
+    })
 
-    async function onSubmit(data: EditProductFormType) {
-        try {
-            setLoading(true);
+    async function onSubmit(data: ProductPayload) {
 
-            const commonData = {
-                ...data,
-                updatedAt: new Date(),
-            };
-
-            if (!!id) {
-                await updateDoc(doc(db, "products", id), commonData);
-            } else {
-                const payload = {
-                    ...commonData,
-                    createdAt: new Date(),
-                };
-
-                const ref = await addDoc(collection(db, "products"), payload);
-
-                await setDoc(ref, {
-                    id: ref.id,
-                    ...payload,
+        await mutation.mutateAsync(data, {
+            onSuccess: () => {
+                client.invalidateQueries({
+                    queryKey: ["products"],
+                    type: "all",
                 });
+                client.refetchQueries({
+                    queryKey: ["products"],
+                    type: "all",
+                });
+                toast({
+                    title: "Success!",
+                })
+                onSubmitSuccess()
+            },
+            onError: (error) => {
+                toast({
+                    title: "Error",
+                    description: error.message
+                })
             }
-
-            setLoading(false);
-            onSubmitSuccess();
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        })
     }
 
     return {
         onSubmit,
-        loading,
+        ...mutation
     };
 }

@@ -16,12 +16,16 @@ import { cn } from "@/lib/utils";
 import { CheckIcon, CaretSortIcon } from "@radix-ui/react-icons";
 import React from "react";
 
-type TProps = {
-  options: { label: string; value: number }[];
-  onSelect: (value: number) => void;
-  value?: number;
+type TProps<T = number> = {
+  options: { label: string; value: T }[];
+  onSelect: (value: T) => void;
+  value?: T;
 };
-export default function AppPopoverPicker({ onSelect, options, value }: TProps) {
+export default function AppPopoverPicker<T>({
+  onSelect,
+  options,
+  value,
+}: TProps<T>) {
   const [open, setOpen] = React.useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,7 +54,7 @@ export default function AppPopoverPicker({ onSelect, options, value }: TProps) {
             {options.map((option) => (
               <CommandItem
                 value={option.label}
-                key={option.value}
+                key={JSON.stringify(option.value)}
                 onSelect={() => {
                   onSelect(option.value);
                   setOpen(false);

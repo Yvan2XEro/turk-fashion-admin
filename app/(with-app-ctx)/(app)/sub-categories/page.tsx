@@ -16,11 +16,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useQueryClient } from "@tanstack/react-query";
 import useAppDeleteMutation from "@/hooks/useAppDeleteMutation";
 import { ColumnDef } from "@tanstack/react-table";
+import { SubCategory } from "@/lib/api/sub-categories";
 
 export default function Page() {
   const client = useQueryClient();
   const deleteMutation = useAppDeleteMutation();
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<SubCategory>[] = [
     {
       id: "select",
       header: ({ table }) => (

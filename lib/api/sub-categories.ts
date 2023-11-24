@@ -1,5 +1,7 @@
 import * as z from "zod"
 import { DefaultObject } from "@/types/models";
+import { Category } from "./categories";
+import { Filter } from "./filters";
 
 
 export const subCategorySchema = z.object({
@@ -12,4 +14,7 @@ export const subCategorySchema = z.object({
 })
 
 export type SubCategoryPayload = z.infer<typeof subCategorySchema>
-export type SubCategory = SubCategoryPayload & DefaultObject
+export type SubCategory = Omit<Omit<SubCategoryPayload, "filters">, "category"> & DefaultObject & {
+    category: Category,
+    filters: Filter[]
+}

@@ -8,20 +8,16 @@ import {
 import React from "react";
 
 import { EditSubCategoryForm } from ".";
-import { SubCategoryPayload } from "@/lib/api/sub-categories";
+import { SubCategory } from "@/lib/api/sub-categories";
 
 type TProps = {
-  data?: SubCategoryPayload;
+  data?: SubCategory;
   id?: number;
   button: React.ReactNode;
   title: string;
 };
-export default function EditSubCategorySheet({
-  button,
-  data,
-  title,
-  id,
-}: TProps) {
+export default function EditSubCategorySheet(props: TProps) {
+  const { button, data, title, id } = props;
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>

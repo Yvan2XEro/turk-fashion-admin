@@ -13,12 +13,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useMemo } from "react";
 import useEditSubCategoryForm from "./useEditSubCategoryForm";
 import { AppPopoverPicker } from "@/components/moleculs/AppPopoverPicker";
-import useCollectionData from "@/hooks/useCollectionData";
-import { collection, query } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
 import { MultiSelect } from "@/components/moleculs/MultiSelect";
 import {
+  SubCategory,
   SubCategoryPayload,
   subCategorySchema,
 } from "@/lib/api/sub-categories";
@@ -28,7 +26,7 @@ import { Category } from "@/lib/api/categories";
 import { Filter } from "@/lib/api/filters";
 
 type TProps = {
-  data?: SubCategoryPayload;
+  data?: SubCategory;
   id?: number;
   onSubmitSuccess: () => void;
 };
@@ -42,9 +40,9 @@ export default function EditSubCategoryForm({
     mode: "onChange",
     defaultValues: {
       ...data,
-      category: !!data?.category ? (data.category as any).id : undefined,
+      category: !!data?.category ? data.category.id : undefined,
       filters: !!data?.filters
-        ? (data.filters as any).map((filter: any) => filter.id)
+        ? data.filters.map((filter: any) => filter.id)
         : undefined,
     },
   });
