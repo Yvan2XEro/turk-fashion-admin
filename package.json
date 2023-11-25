@@ -31,7 +31,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
-    "firebase": "^10.6.0",
     "form-data": "^4.0.0",
     "i18next": "^23.7.6",
     "jwt-decode": "^4.0.0",
