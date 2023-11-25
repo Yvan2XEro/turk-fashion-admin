@@ -42,6 +42,7 @@ function AppImageField(props: InputProps, ref: any) {
         await uploadMutation.mutateAsync(value);
       })();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
   return (
     <>
