@@ -14,6 +14,7 @@ import React from "react";
 import useEditProductForm from "./useEditCategoryForm";
 import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
 import { CategoryPayload, categorySchema } from "@/lib/api/categories";
+import { AppLoader } from "@/components/moleculs/AppLoader";
 
 type TProps = {
   data?: CategoryPayload;
@@ -75,7 +76,7 @@ export default function EditCategoryForm({
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

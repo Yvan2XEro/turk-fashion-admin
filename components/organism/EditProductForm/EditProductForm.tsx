@@ -22,6 +22,15 @@ import { useQuery } from "@tanstack/react-query";
 import { Category } from "@/lib/api/categories";
 import { Filter } from "@/lib/api/filters";
 import { SubCategory } from "@/lib/api/sub-categories";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AppLoader } from "@/components/moleculs/AppLoader";
 
 type TProps = {
   data?: Product;
@@ -81,7 +90,7 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
     );
   }, [selectedSubCategoryid, paginatedSubCategories?.data]);
 
-  const { onSubmit } = useEditProductForm({
+  const { onSubmit, isPending } = useEditProductForm({
     onSubmitSuccess,
     id,
   });
@@ -91,6 +100,79 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem
+                          onChange={() => field.onChange("active")}
+                          value="inactive"
+                        >
+                          Inactive
+                        </SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-col md:flex-row md:items-center md:gap-1 space-y-8 md:space-y-0">
+            <FormItem className="flex flex-col flex-auto">
+              <FormLabel>Category</FormLabel>
+              <AppPopoverPicker
+                value={selectedCategoryid}
+                options={
+                  paginatedCategories?.data.map((c) => ({
+                    label: c.name,
+                    value: c.id,
+                  })) || []
+                }
+                onSelect={(value) => {
+                  setSelectedCategoryId(value);
+                  form.resetField("subCategory");
+                }}
+              />
+              <FormMessage />
+            </FormItem>
+
+            <FormField
+              control={form.control}
+              name="subCategory"
+              render={({ field }) => (
+                <FormItem className="flex flex-col flex-auto">
+                  <FormLabel>Sub Category</FormLabel>
+                  <AppPopoverPicker
+                    value={field.value}
+                    options={
+                      paginatedSubCategories?.data
+                        .filter((s) => s.category.id === selectedCategoryid)
+                        .map((c) => ({
+                          label: c.name,
+                          value: c.id,
+                        })) || []
+                    }
+                    onSelect={(value) => form.setValue("subCategory", value)}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
@@ -98,46 +180,6 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormItem className="flex flex-col">
-            <FormLabel>Category</FormLabel>
-            <AppPopoverPicker
-              value={selectedCategoryid}
-              options={
-                paginatedCategories?.data.map((c) => ({
-                  label: c.name,
-                  value: c.id,
-                })) || []
-              }
-              onSelect={(value) => {
-                setSelectedCategoryId(value);
-                form.resetField("subCategory");
-              }}
-            />
-            <FormMessage />
-          </FormItem>
-
-          <FormField
-            control={form.control}
-            name="subCategory"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Sub Category</FormLabel>
-                <AppPopoverPicker
-                  value={field.value}
-                  options={
-                    paginatedSubCategories?.data
-                      .filter((s) => s.category.id === selectedCategoryid)
-                      .map((c) => ({
-                        label: c.name,
-                        value: c.id,
-                      })) || []
-                  }
-                  onSelect={(value) => form.setValue("subCategory", value)}
-                />
                 <FormMessage />
               </FormItem>
             )}
@@ -216,6 +258,29 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
 
           <FormField
             control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Slug</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    value={
+                      field.value ||
+                      form
+                        .watch("name")
+                        ?.toLowerCase()
+                        .replace(/ /g, "-")
+                        .replace(/[^\w-]+/g, "")
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="photoUrl"
             render={({ field }) => (
               <FormItem>
@@ -234,7 +299,7 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

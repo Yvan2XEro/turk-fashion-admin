@@ -14,6 +14,7 @@ import React from "react";
 import useEditFilterForm from "./useEditFilterForm";
 import { AppTagsInput2 } from "@/components/moleculs/AppTagsInput";
 import { FilterPayload, filterSchema } from "@/lib/api/filters";
+import { AppLoader } from "@/components/moleculs/AppLoader";
 
 type TProps = {
   data?: FilterPayload;
@@ -33,7 +34,7 @@ export default function EditCategoryForm({
     },
   });
 
-  const { onSubmit } = useEditFilterForm({
+  const { onSubmit, isPending } = useEditFilterForm({
     onSubmitSuccess,
     id,
   });
@@ -72,7 +73,7 @@ export default function EditCategoryForm({
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

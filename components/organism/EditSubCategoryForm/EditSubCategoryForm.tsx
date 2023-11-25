@@ -24,6 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 import { universalFetch } from "@/lib/api/universalfetch";
 import { Category } from "@/lib/api/categories";
 import { Filter } from "@/lib/api/filters";
+import { AppLoader } from "@/components/moleculs/AppLoader";
 
 type TProps = {
   data?: SubCategory;
@@ -47,7 +48,7 @@ export default function EditSubCategoryForm({
     },
   });
 
-  const { onSubmit } = useEditSubCategoryForm({
+  const { onSubmit, isPending } = useEditSubCategoryForm({
     onSubmitSuccess,
     id,
   });
@@ -153,7 +154,7 @@ export default function EditSubCategoryForm({
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

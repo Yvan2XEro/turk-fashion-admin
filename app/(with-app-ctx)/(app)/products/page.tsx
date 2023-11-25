@@ -5,7 +5,6 @@ import { MoreVertical, Plus } from "lucide-react";
 import { EditProductSheet } from "@/components/organism/EditProductForm";
 import useAppDeleteMutation from "@/hooks/useAppDeleteMutation";
 import { AppDataTable } from "@/components/organism/AppDataTable";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import {
   DropdownMenu,
@@ -16,11 +15,14 @@ import {
 import { Label } from "@radix-ui/react-label";
 import { useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
+import { Product } from "@/lib/api/products";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 export default function Page() {
   const client = useQueryClient();
   const deleteMutation = useAppDeleteMutation();
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<Product>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -57,13 +59,42 @@ export default function Page() {
                     alt={props.row.original.name}
                   />
                 </Avatar>
-                <Label className="cursor-pointer">
-                  {props.row.original.name.substring(0, 16) + "..."}
-                </Label>
+                <div>
+                  <Label className="cursor-pointer block">
+                    {props.row.original.name.substring(0, 16) + "..."}
+                  </Label>
+                  <Badge>
+                    {props.row.original.subCategory.category.name} /{" "}
+                    {props.row.original.subCategory.name}
+                  </Badge>
+                </div>
               </button>
             }
             data={props.row.original}
           />
+        );
+      },
+    },
+    {
+      header: "Count in Stock",
+      cell(props) {
+        return <div>{props.row.original.currentStock}</div>;
+      },
+    },
+    {
+      header: "Status",
+      cell(props) {
+        return (
+          <div>
+            <Badge
+              variant={
+                props.row.original.status === "active" ? "default" : "outline"
+              }
+              className="uppercase"
+            >
+              {props.row.original.status}
+            </Badge>
+          </div>
         );
       },
     },
@@ -114,12 +145,15 @@ export default function Page() {
               >
                 Delete
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={async () => {}}>
-                Activate
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={async () => {}}>
-                Deactivate
-              </DropdownMenuItem>
+              {props.row.original.status !== "active" ? (
+                <DropdownMenuItem onClick={async () => {}}>
+                  Activate
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem onClick={async () => {}}>
+                  Deactivate
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );
