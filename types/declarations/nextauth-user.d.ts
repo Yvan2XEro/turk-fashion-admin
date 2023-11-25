@@ -1,9 +1,9 @@
+import { User } from "@/lib/api/users";
 import NextAuth from "next-auth/next";
-import { User } from "../models";
 
 declare module "next-auth" {
     interface Session {
-        user?: User & {
+        user?: User & { error: any } & {
             accessToken?: string,
             refreshToken?: string,
             expires?: number

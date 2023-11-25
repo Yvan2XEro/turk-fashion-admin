@@ -49,11 +49,16 @@ const menuItems = [
   //     href: "/orders",
   //     icon: <ShoppingCart />,
   //   },
-  //   {
-  //     name: "Users",
-  //     href: "/users",
-  //     icon: <Users />,
-  //   },
+  {
+    name: "Users",
+    href: "/users",
+    icon: <Users />,
+  },
+  {
+    name: "Admins",
+    href: "/admins",
+    icon: <Users />,
+  },
   //   {
   //     name: "Reviews",
   //     href: "/reviews",

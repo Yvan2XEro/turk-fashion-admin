@@ -163,7 +163,8 @@ export default function Page() {
   const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
   return (
     <div>
-      <div className="mb-2 flex justify-end">
+      <div className="mb-2 flex justify-between">
+        <h1 className="font-bold uppercase text-xl">Products List</h1>
         <EditProductSheet
           title="New Product"
           button={
@@ -178,34 +179,36 @@ export default function Page() {
         columns={columns as any}
         path="products"
         setSelectedIds={setSelectedIds}
-        actions={[
-          <Button
-            onClick={() => {
-              if (!confirm("Are you sure you want to delete these items?"))
-                return;
-              deleteMutation.mutateAsync(
-                {
-                  path: "products",
-                  ids: selectedIds,
-                },
-                {
-                  onSuccess(data) {
-                    client.invalidateQueries({
-                      queryKey: ["products"],
-                      type: "all",
-                    });
-                    client.refetchQueries({
-                      queryKey: ["products"],
-                      type: "all",
-                    });
+        actions={
+          <>
+            <Button
+              onClick={() => {
+                if (!confirm("Are you sure you want to delete these items?"))
+                  return;
+                deleteMutation.mutateAsync(
+                  {
+                    path: "products",
+                    ids: selectedIds,
                   },
-                }
-              );
-            }}
-          >
-            Delete
-          </Button>,
-        ]}
+                  {
+                    onSuccess(data) {
+                      client.invalidateQueries({
+                        queryKey: ["products"],
+                        type: "all",
+                      });
+                      client.refetchQueries({
+                        queryKey: ["products"],
+                        type: "all",
+                      });
+                    },
+                  }
+                );
+              }}
+            >
+              Delete
+            </Button>
+          </>
+        }
       />
     </div>
   );

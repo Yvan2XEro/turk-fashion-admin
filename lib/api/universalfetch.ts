@@ -46,7 +46,7 @@ export async function universalCreate<T>({ path, payload }: CreateTProps<T>) {
 
 type UpdateTProps<T> = {
     path: string,
-    payload: T
+    payload: Partial<T>
     id: number
 }
 export async function universalUpdate<T>({ path, payload, id }: UpdateTProps<T>) {
