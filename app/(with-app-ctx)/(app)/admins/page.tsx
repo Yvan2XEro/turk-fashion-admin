@@ -186,34 +186,36 @@ export default function Page() {
         columns={columns as any}
         path="users/admins/all"
         setSelectedIds={setSelectedIds}
-        actions={[
-          <Button
-            onClick={() => {
-              if (!confirm("Are you sure you want to delete these items?"))
-                return;
-              deleteMutation.mutateAsync(
-                {
-                  path: "users/admins/all",
-                  ids: selectedIds,
-                },
-                {
-                  onSuccess(data) {
-                    client.invalidateQueries({
-                      queryKey: ["users/admins/all"],
-                      type: "all",
-                    });
-                    client.refetchQueries({
-                      queryKey: ["users/admins/all"],
-                      type: "all",
-                    });
+        actions={
+          <>
+            <Button
+              onClick={() => {
+                if (!confirm("Are you sure you want to delete these items?"))
+                  return;
+                deleteMutation.mutateAsync(
+                  {
+                    path: "users/admins/all",
+                    ids: selectedIds,
                   },
-                }
-              );
-            }}
-          >
-            Delete
-          </Button>,
-        ]}
+                  {
+                    onSuccess(data) {
+                      client.invalidateQueries({
+                        queryKey: ["users/admins/all"],
+                        type: "all",
+                      });
+                      client.refetchQueries({
+                        queryKey: ["users/admins/all"],
+                        type: "all",
+                      });
+                    },
+                  }
+                );
+              }}
+            >
+              Delete
+            </Button>
+          </>
+        }
       />
     </div>
   );
