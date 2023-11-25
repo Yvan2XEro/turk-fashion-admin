@@ -5,7 +5,7 @@ import AppQueryCliantProvider from "./AppQueryCliantProvider";
 export default function Providers({ children }: PropsWithChildren) {
   return (
     <AppQueryCliantProvider>
-      <SessionProvider>{children}</SessionProvider>;
+      <SessionProvider>{children}</SessionProvider>
     </AppQueryCliantProvider>
   );
 }

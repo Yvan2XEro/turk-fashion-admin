@@ -3,3 +3,10 @@ export type DefaultObject = {
     createdAt: string
     updatedAt: string
 }
+
+
+export type User = DefaultObject & {
+    name: string
+    email: string
+    error: any
+}
