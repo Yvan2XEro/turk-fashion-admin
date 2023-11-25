@@ -20,6 +20,7 @@ import { Stock, StockPayload, stockSchema } from "@/lib/api/stocks";
 import { Product } from "@/lib/api/products";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
 
 type TProps = {
   data?: Stock;
@@ -32,6 +33,7 @@ export default function EditStockForm({ data, onSubmitSuccess, id }: TProps) {
     mode: "onChange",
     defaultValues: {
       ...data,
+      isCurrent: !data ? true : data.isCurrent,
       product: !!data?.product ? data.product.id : undefined,
     },
   });
@@ -127,18 +129,27 @@ export default function EditStockForm({ data, onSubmitSuccess, id }: TProps) {
           />
           <FormField
             control={form.control}
+            disabled={!id}
             name="isCurrent"
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
+                    value={!!field.value ? "true" : "false"}
+                    disabled={!id}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>Is Current Stock</FormLabel>
                 </div>
+                {!id && (
+                  <Label>
+                    New item will be set as current stock for counting, you can
+                    change it later
+                  </Label>
+                )}
               </FormItem>
             )}
           />
