@@ -11,46 +11,64 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useMemo } from "react";
-import {
-  EditSubCategoryFormType,
-  editSubCategoryFormSchema,
-} from "./form-props";
 import useEditSubCategoryForm from "./useEditSubCategoryForm";
 import { AppPopoverPicker } from "@/components/moleculs/AppPopoverPicker";
-import useCollectionData from "@/hooks/useCollectionData";
-import { Category, Filter } from "@/types/models";
-import { collection, query } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
 import { MultiSelect } from "@/components/moleculs/MultiSelect";
+import {
+  SubCategory,
+  SubCategoryPayload,
+  subCategorySchema,
+} from "@/lib/api/sub-categories";
+import { useQuery } from "@tanstack/react-query";
+import { universalFetch } from "@/lib/api/universalfetch";
+import { Category } from "@/lib/api/categories";
+import { Filter } from "@/lib/api/filters";
+import { AppLoader } from "@/components/moleculs/AppLoader";
 
 type TProps = {
-  data?: EditSubCategoryFormType;
-  uuid?: string;
+  data?: SubCategory;
+  id?: number;
   onSubmitSuccess: () => void;
 };
 export default function EditSubCategoryForm({
   data,
   onSubmitSuccess,
-  uuid,
+  id,
 }: TProps) {
-  const form = useForm<EditSubCategoryFormType>({
-    resolver: zodResolver(editSubCategoryFormSchema),
+  const form = useForm<SubCategoryPayload>({
+    resolver: zodResolver(subCategorySchema),
     mode: "onChange",
     defaultValues: {
       ...data,
+      category: !!data?.category ? data.category.id : undefined,
+      filters: !!data?.filters
+        ? data.filters.map((filter: any) => filter.id)
+        : undefined,
     },
   });
 
-  const { onSubmit } = useEditSubCategoryForm({
+  const { onSubmit, isPending } = useEditSubCategoryForm({
     onSubmitSuccess,
-    uuid,
+    id,
   });
-  const { data: categories } = useCollectionData<Category>({
-    q: query(collection(db, "categories")),
+  const { data: paginatedCategorie } = useQuery({
+    queryFn: () =>
+      universalFetch<Category>({
+        page: 1,
+        limit: 100,
+        path: "/categories",
+      }),
+    queryKey: ["categories"],
   });
-  const { data: filters } = useCollectionData<Filter>({
-    q: query(collection(db, "filters")),
+  const { data: paginatedFilters } = useQuery({
+    queryFn: () =>
+      universalFetch<Filter>({
+        page: 1,
+        limit: 100,
+        path: "/filters",
+      }),
+    queryKey: ["filters"],
   });
 
   return (
@@ -72,18 +90,20 @@ export default function EditSubCategoryForm({
           />
           <FormField
             control={form.control}
-            name="categoryUuid"
+            name="category"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Category</FormLabel>
                 <AppPopoverPicker
                   value={field.value}
-                  options={categories.map((c) => ({
-                    label: c.name,
-                    value: c.uuid,
-                  }))}
+                  options={
+                    paginatedCategorie?.data.map((c) => ({
+                      label: c.name,
+                      value: c.id,
+                    })) || []
+                  }
                   onSelect={(value) => {
-                    form.setValue("categoryUuid", value);
+                    form.setValue("category", value);
                   }}
                 />
                 <FormMessage />
@@ -120,10 +140,12 @@ export default function EditSubCategoryForm({
                 <FormControl>
                   <MultiSelect
                     value={field.value}
-                    options={filters.map((c) => ({
-                      label: c.label,
-                      uuid: c.uuid,
-                    }))}
+                    options={
+                      paginatedFilters?.data.map((c) => ({
+                        label: c.name,
+                        id: c.id,
+                      })) || []
+                    }
                     onTagsChange={field.onChange}
                   />
                 </FormControl>
@@ -132,7 +154,7 @@ export default function EditSubCategoryForm({
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

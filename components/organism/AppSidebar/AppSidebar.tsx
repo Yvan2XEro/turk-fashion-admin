@@ -1,26 +1,9 @@
 "use client";
 import { DarkModeToggler } from "@/components/moleculs/DarkModeToggler";
 import { Label } from "@/components/ui/label";
-import {
-  Archive,
-  Box,
-  ChevronLeft,
-  ChevronRight,
-  Gift,
-  Layers,
-  LayoutDashboard,
-  LayoutList,
-  LifeBuoy,
-  Settings,
-  ShoppingCart,
-  Stars,
-  Tag,
-  Users,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-// import { SubMenu, MenuItem, Sidebar, Menu } from "react-pro-sidebar";
-import { useOnClickOutside } from "usehooks-ts";
 import menuItems from "./menuItems";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -65,7 +48,7 @@ export default function AppSidebar(props: TProps) {
             </Link>
           </div>
         ))}
-        <div className="flex justify-center items-center mt-4">
+        <div className="flex gap-4 p-2">
           <DarkModeToggler />
         </div>
       </div>

@@ -10,32 +10,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useMemo } from "react";
-import { EditFilterFormType, editFilterFormSchema } from "./edit-filter-form";
+import React from "react";
 import useEditFilterForm from "./useEditFilterForm";
 import { AppTagsInput2 } from "@/components/moleculs/AppTagsInput";
+import { FilterPayload, filterSchema } from "@/lib/api/filters";
+import { AppLoader } from "@/components/moleculs/AppLoader";
 
 type TProps = {
-  data?: EditFilterFormType;
-  uuid?: string;
+  data?: FilterPayload;
+  id?: number;
   onSubmitSuccess: () => void;
 };
 export default function EditCategoryForm({
   data,
   onSubmitSuccess,
-  uuid,
+  id,
 }: TProps) {
-  const form = useForm<EditFilterFormType>({
-    resolver: zodResolver(editFilterFormSchema),
+  const form = useForm<FilterPayload>({
+    resolver: zodResolver(filterSchema),
     mode: "onChange",
     defaultValues: {
       ...data,
     },
   });
 
-  const { onSubmit } = useEditFilterForm({
+  const { onSubmit, isPending } = useEditFilterForm({
     onSubmitSuccess,
-    uuid,
+    id,
   });
 
   return (
@@ -44,7 +45,7 @@ export default function EditCategoryForm({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="label"
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Filter name</FormLabel>
@@ -72,7 +73,7 @@ export default function EditCategoryForm({
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

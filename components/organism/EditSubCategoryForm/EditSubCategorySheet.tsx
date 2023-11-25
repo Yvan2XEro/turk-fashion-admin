@@ -7,21 +7,17 @@ import {
 } from "@/components/ui/sheet";
 import React from "react";
 
-import { EditSubCategoryFormType } from "./form-props";
 import { EditSubCategoryForm } from ".";
+import { SubCategory } from "@/lib/api/sub-categories";
 
 type TProps = {
-  data?: EditSubCategoryFormType;
-  uuid?: string;
+  data?: SubCategory;
+  id?: number;
   button: React.ReactNode;
   title: string;
 };
-export default function EditSubCategorySheet({
-  button,
-  data,
-  title,
-  uuid,
-}: TProps) {
+export default function EditSubCategorySheet(props: TProps) {
+  const { button, data, title, id } = props;
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -36,7 +32,7 @@ export default function EditSubCategorySheet({
         <EditSubCategoryForm
           onSubmitSuccess={() => setOpen(false)}
           data={data}
-          uuid={uuid}
+          id={id}
         />
       </SheetContent>
     </Sheet>

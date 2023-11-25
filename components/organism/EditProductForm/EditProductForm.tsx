@@ -10,81 +10,167 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useMemo } from "react";
-import {
-  EditProductFormType,
-  editProductFormSchema,
-} from "./edit-product-form";
+import React, { useMemo, useState } from "react";
 import useEditProductForm from "./useEditProductForm";
 import { Textarea } from "@/components/ui/textarea";
 import { AppPopoverPicker } from "@/components/moleculs/AppPopoverPicker";
 import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
-import { AppTagsInput } from "@/components/moleculs/AppTagsInput";
-import useCollectionData from "@/hooks/useCollectionData";
-import { collection, query } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { Category, Filter, SubCategory, TagObj } from "@/types/models";
+import { AppTagsInput2 } from "@/components/moleculs/AppTagsInput";
+import { Product, ProductPayload, productSchema } from "@/lib/api/products";
+import { universalFetch } from "@/lib/api/universalfetch";
+import { useQuery } from "@tanstack/react-query";
+import { Category } from "@/lib/api/categories";
+import { Filter } from "@/lib/api/filters";
+import { SubCategory } from "@/lib/api/sub-categories";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AppLoader } from "@/components/moleculs/AppLoader";
 
 type TProps = {
-  data?: EditProductFormType;
-  uuid?: string;
+  data?: Product;
+  id?: number;
   onSubmitSuccess: () => void;
 };
-export default function EditProductForm({
-  data,
-  onSubmitSuccess,
-  uuid,
-}: TProps) {
-  const form = useForm<EditProductFormType>({
-    resolver: zodResolver(editProductFormSchema),
+export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
+  const form = useForm<ProductPayload>({
+    resolver: zodResolver(productSchema),
     mode: "onChange",
     defaultValues: {
       ...data,
+      subCategory: !!data?.subCategory?.id ? data.subCategory.id : undefined,
     },
   });
 
-  const { data: categories } = useCollectionData<Category>({
-    q: query(collection(db, "categories")),
+  const { data: paginatedCategories } = useQuery({
+    queryFn: () =>
+      universalFetch<Category>({
+        page: 1,
+        limit: 100,
+        path: "/categories",
+      }),
+    queryKey: ["categories"],
   });
 
-  const { data: subCategories } = useCollectionData<SubCategory>({
-    q: query(collection(db, "subcategories")),
+  const { data: paginatedSubCategories } = useQuery({
+    queryFn: () =>
+      universalFetch<SubCategory>({
+        page: 1,
+        limit: 100,
+        path: "/sub-categories",
+      }),
+    queryKey: ["sub-categories"],
   });
 
-  const { data: filters } = useCollectionData<Filter>({
-    q: query(collection(db, "filters")),
+  const { data: paginatedFilters } = useQuery({
+    queryFn: () =>
+      universalFetch<Filter>({
+        page: 1,
+        limit: 100,
+        path: "/filters",
+      }),
+    queryKey: ["filters"],
   });
 
-  const { data: tags } = useCollectionData<TagObj>({
-    q: query(collection(db, "tags")),
-  });
+  const [selectedCategoryid, setSelectedCategoryId] = useState<
+    number | undefined
+  >(data?.subCategory.category.id);
 
-  const selectedCategoryUuid = form.watch("categoryUuid");
-  const selectedSubCategoryUuid = form.watch("subCategoryUuid");
-
+  const selectedSubCategoryid = form.watch("subCategory");
   const filtersToDisplay = useMemo(() => {
-    const subCategoryObj = subCategories.find(
-      (s) => s.uuid === selectedSubCategoryUuid
+    if (!selectedSubCategoryid || !paginatedSubCategories?.data) return [];
+    return (
+      paginatedSubCategories?.data.find((s) => s.id === selectedSubCategoryid)
+        ?.filters || []
     );
-    if (
-      !filters ||
-      !selectedSubCategoryUuid ||
-      !subCategoryObj ||
-      !subCategoryObj.filters
-    )
-      return [];
+  }, [selectedSubCategoryid, paginatedSubCategories?.data]);
 
-    return filters.filter((f) => subCategoryObj.filters.includes(f.uuid));
-  }, [selectedSubCategoryUuid, filters, subCategories]);
-
-  const { onSubmit } = useEditProductForm({
+  const { onSubmit, isPending } = useEditProductForm({
     onSubmitSuccess,
-    uuid,
+    id,
   });
   return (
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem
+                          onChange={() => field.onChange("active")}
+                          value="inactive"
+                        >
+                          Inactive
+                        </SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-col md:flex-row md:items-center md:gap-1 space-y-8 md:space-y-0">
+            <FormItem className="flex flex-col flex-auto">
+              <FormLabel>Category</FormLabel>
+              <AppPopoverPicker
+                value={selectedCategoryid}
+                options={
+                  paginatedCategories?.data.map((c) => ({
+                    label: c.name,
+                    value: c.id,
+                  })) || []
+                }
+                onSelect={(value) => {
+                  setSelectedCategoryId(value);
+                  form.resetField("subCategory");
+                }}
+              />
+              <FormMessage />
+            </FormItem>
+
+            <FormField
+              control={form.control}
+              name="subCategory"
+              render={({ field }) => (
+                <FormItem className="flex flex-col flex-auto">
+                  <FormLabel>Sub Category</FormLabel>
+                  <AppPopoverPicker
+                    value={field.value}
+                    options={
+                      paginatedSubCategories?.data
+                        .filter((s) => s.category.id === selectedCategoryid)
+                        .map((c) => ({
+                          label: c.name,
+                          value: c.id,
+                        })) || []
+                    }
+                    onSelect={(value) => form.setValue("subCategory", value)}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="name"
@@ -98,72 +184,33 @@ export default function EditProductForm({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="categoryUuid"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Category</FormLabel>
-                <AppPopoverPicker
-                  value={field.value}
-                  options={categories.map((c) => ({
-                    label: c.name,
-                    value: c.uuid,
-                  }))}
-                  onSelect={(value) => {
-                    form.setValue("categoryUuid", value);
-                    form.resetField("subCategoryUuid");
-                  }}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="subCategoryUuid"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Sub Category</FormLabel>
-                <AppPopoverPicker
-                  value={field.value}
-                  options={subCategories
-                    .filter((s) => s.categoryUuid === selectedCategoryUuid)
-                    .map((c) => ({
-                      label: c.name,
-                      value: c.uuid,
-                    }))}
-                  onSelect={(value) => form.setValue("subCategoryUuid", value)}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {filtersToDisplay.map((filter) => (
+          {filtersToDisplay?.map((filter) => (
             <FormField
               control={form.control}
-              key={filter.uuid}
+              key={filter.id}
               name="filters"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{filter.label}:</FormLabel>
-                  <AppPopoverPicker
-                    value={field.value?.[filter.uuid]}
-                    options={filter.values.map((val) => ({
-                      label: val,
-                      value: val,
-                    }))}
-                    onSelect={(value) =>
-                      form.setValue("filters", {
-                        ...field.value,
-                        [filter.uuid]: value,
-                      })
-                    }
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const value = field.value?.find(([_, id]) => id === filter.id);
+                return (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>{filter.name}:</FormLabel>
+                    <AppPopoverPicker
+                      value={!!value ? value[2] : undefined}
+                      options={filter.values.map((val) => ({
+                        label: val,
+                        value: val,
+                      }))}
+                      onSelect={(value) =>
+                        form.setValue("filters", [
+                          ...[...(field.value || [])],
+                          [filter.name, filter.id, value],
+                        ])
+                      }
+                    />
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           ))}
           <FormField
@@ -199,9 +246,8 @@ export default function EditProductForm({
               <FormItem>
                 <FormLabel>Tag</FormLabel>
                 <FormControl>
-                  <AppTagsInput
-                    tags={field.value}
-                    availableTags={tags.map((t) => t.label)}
+                  <AppTagsInput2
+                    tags={field.value || []}
                     onTagsChange={field.onChange}
                   />
                 </FormControl>
@@ -210,6 +256,29 @@ export default function EditProductForm({
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Slug</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    value={
+                      field.value ||
+                      form
+                        .watch("name")
+                        ?.toLowerCase()
+                        .replace(/ /g, "-")
+                        .replace(/[^\w-]+/g, "")
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="photoUrl"
@@ -230,7 +299,7 @@ export default function EditProductForm({
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

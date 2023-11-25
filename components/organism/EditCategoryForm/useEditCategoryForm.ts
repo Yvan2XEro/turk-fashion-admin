@@ -1,50 +1,56 @@
-import { db } from "@/lib/firebase";
-import { EditCategoryFormType } from "./edit-category-form";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CategoryPayload } from "@/lib/api/categories";
+import { useToast } from "@/components/ui/use-toast";
+import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
 
 type TProps = {
     onSubmitSuccess: () => void;
-    uuid?: string;
+    id?: number;
 };
 
-export default function useEditCategoryForm({ onSubmitSuccess, uuid }: TProps) {
-    const [loading, setLoading] = useState(false);
+export default function useEditCategoryForm({ onSubmitSuccess, id }: TProps) {
 
-    async function onSubmit(data: EditCategoryFormType) {
-        try {
-            setLoading(true);
+    const { toast } = useToast()
+    const client = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: (payload: CategoryPayload) => !id ? universalCreate({
+            path: `/categories`,
+            payload
+        }) : universalUpdate<CategoryPayload>({
+            path: `/categories`,
+            id,
+            payload
+        }),
+    })
 
-            const commonData = {
-                ...data,
-                updatedAt: new Date(),
-            };
+    async function onSubmit(data: CategoryPayload) {
 
-            if (!!uuid) {
-                await updateDoc(doc(db, "categories", uuid), commonData);
-            } else {
-                const payload = {
-                    ...commonData,
-                    createdAt: new Date(),
-                };
-
-                const ref = await addDoc(collection(db, "categories"), payload);
-
-                await setDoc(ref, {
-                    uuid: ref.id,
-                    ...payload,
+        await mutation.mutateAsync(data, {
+            onSuccess: () => {
+                client.invalidateQueries({
+                    queryKey: ["categories"],
+                    type: "all",
                 });
+                client.refetchQueries({
+                    queryKey: ["categories"],
+                    type: "all",
+                });
+                toast({
+                    title: "Success!",
+                })
+                onSubmitSuccess()
+            },
+            onError: (error) => {
+                toast({
+                    title: "Error",
+                    description: error.message
+                })
             }
-
-            setLoading(false);
-            onSubmitSuccess();
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        })
     }
 
     return {
         onSubmit,
-        loading,
+        ...mutation
     };
 }

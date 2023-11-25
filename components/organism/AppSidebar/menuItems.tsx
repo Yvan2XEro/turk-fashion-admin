@@ -35,30 +35,30 @@ const menuItems = [
     icon: <Layers />,
   },
   {
-    name: "Tags Management",
-    href: "/tags",
-    icon: <Tag />,
-  },
-  {
     name: "Products",
     href: "/products",
     icon: <Box />,
   },
-  //   {
-  //     name: "Stock Management",
-  //     href: "/stock-management",
-  //     icon: <Archive />,
-  //   },
+  {
+    name: "Stock Management",
+    href: "/stocks",
+    icon: <Archive />,
+  },
   //   {
   //     name: "Orders",
   //     href: "/orders",
   //     icon: <ShoppingCart />,
   //   },
-  //   {
-  //     name: "Users",
-  //     href: "/users",
-  //     icon: <Users />,
-  //   },
+  {
+    name: "Users",
+    href: "/users",
+    icon: <Users />,
+  },
+  {
+    name: "Admins",
+    href: "/admins",
+    icon: <Users />,
+  },
   //   {
   //     name: "Reviews",
   //     href: "/reviews",

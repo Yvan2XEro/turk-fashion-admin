@@ -17,13 +17,13 @@ import React, { useState, useMemo } from "react";
 
 interface Option {
   label: string;
-  uuid: string;
+  id: number;
 }
 
 interface MultiSelectProps {
-  value?: string[];
+  value?: number[];
   options: Option[];
-  onTagsChange: (value: string[]) => void;
+  onTagsChange: (value: number[]) => void;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -32,11 +32,11 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   options,
 }) => {
   const notSelectedOptions = useMemo(
-    () => options.filter((option) => !value.includes(option.uuid)),
+    () => options.filter((option) => !value.includes(option.id)),
     [options, value]
   );
 
-  const removeTag = (tagToRemove: string) => {
+  const removeTag = (tagToRemove: number) => {
     const newTags = value.filter((tag) => tag !== tagToRemove);
     onTagsChange(newTags);
   };
@@ -51,7 +51,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           className="cursor-pointer"
           onClick={() => removeTag(tag)}
         >
-          {options.find((opt) => opt.uuid === tag)?.label || tag}
+          {options.find((opt) => opt.id === tag)?.label || tag}
         </Badge>
       ))}
 
@@ -78,7 +78,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                   value={option.label}
                   onSelect={() => {
                     setOpen(false);
-                    onTagsChange([...value, option.uuid]);
+                    onTagsChange([...value, option.id]);
                   }}
                 >
                   {option.label}

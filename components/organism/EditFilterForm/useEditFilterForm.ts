@@ -1,50 +1,55 @@
-import { db } from "@/lib/firebase";
-import { EditFilterFormType } from "./edit-filter-form";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { FilterPayload } from "@/lib/api/filters";
+import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type TProps = {
     onSubmitSuccess: () => void;
-    uuid?: string;
+    id?: number;
 };
 
-export default function useEditFilterForm({ onSubmitSuccess, uuid }: TProps) {
-    const [loading, setLoading] = useState(false);
+export default function useEditFilterForm({ onSubmitSuccess, id }: TProps) {
+    const { toast } = useToast()
+    const client = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: (payload: FilterPayload) => !id ? universalCreate({
+            path: `/filters`,
+            payload
+        }) : universalUpdate<FilterPayload>({
+            path: `/filters`,
+            id,
+            payload
+        }),
+    })
 
-    async function onSubmit(data: EditFilterFormType) {
-        try {
-            setLoading(true);
+    async function onSubmit(data: FilterPayload) {
 
-            const commonData = {
-                ...data,
-                updatedAt: new Date(),
-            };
-
-            if (!!uuid) {
-                await updateDoc(doc(db, "filters", uuid), commonData);
-            } else {
-                const payload = {
-                    ...commonData,
-                    createdAt: new Date(),
-                };
-
-                const ref = await addDoc(collection(db, "filters"), payload);
-
-                await setDoc(ref, {
-                    uuid: ref.id,
-                    ...payload,
+        await mutation.mutateAsync(data, {
+            onSuccess: () => {
+                client.invalidateQueries({
+                    queryKey: ["filters"],
+                    type: "all",
                 });
+                client.refetchQueries({
+                    queryKey: ["filters"],
+                    type: "all",
+                });
+                toast({
+                    title: "Success!",
+                })
+                onSubmitSuccess()
+            },
+            onError: (error) => {
+                toast({
+                    title: "Error",
+                    description: error.message
+                })
             }
-
-            setLoading(false);
-            onSubmitSuccess();
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        })
     }
 
     return {
         onSubmit,
-        loading,
+        ...mutation
     };
 }
