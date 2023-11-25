@@ -7,10 +7,10 @@ import {
 } from "@/components/ui/sheet";
 import React from "react";
 import { EditProductForm } from ".";
-import { EditProductFormType } from "./edit-product-form";
+import { Product } from "@/lib/api/products";
 
 type TProps = {
-  data?: EditProductFormType;
+  data?: Product;
   id?: number;
   button: React.ReactNode;
   title: string;

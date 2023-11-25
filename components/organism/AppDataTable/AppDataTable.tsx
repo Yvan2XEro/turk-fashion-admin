@@ -116,7 +116,7 @@ export default function AppDataTable(props: DataTableProps<DefaultObject>) {
       .map((e) => e.id);
   }, [rowSelection, data]);
 
-  useEffect(() => props.setSelectedIds(selectedIds), [selectedIds]);
+  useEffect(() => props.setSelectedIds(selectedIds), [selectedIds, props]);
 
   // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
