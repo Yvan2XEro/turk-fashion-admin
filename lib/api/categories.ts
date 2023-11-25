@@ -1,5 +1,4 @@
 import * as z from "zod"
-import { fetchWithAuth } from "./app-fetch";
 import { DefaultObject } from "@/types/models";
 
 

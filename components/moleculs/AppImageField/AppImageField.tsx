@@ -3,9 +3,7 @@
 import React, { useEffect } from "react";
 import { DropzoneOptions } from "react-dropzone";
 import { SingleImageDropzone } from "../SingleImageDropzone";
-import { uploadImageToFirebase } from "@/lib/upload";
 import { AppLoader } from "../AppLoader";
-import { fetchWithAuth } from "@/lib/api/app-fetch";
 import { upload } from "@/lib/api/images";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
