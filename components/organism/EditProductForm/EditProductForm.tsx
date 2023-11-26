@@ -164,7 +164,10 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
                           value: c.id,
                         })) || []
                     }
-                    onSelect={(value) => form.setValue("subCategory", value)}
+                    onSelect={(value) => {
+                      form.setValue("subCategory", value);
+                      form.resetField("filtersValues");
+                    }}
                   />
                   <FormMessage />
                 </FormItem>
