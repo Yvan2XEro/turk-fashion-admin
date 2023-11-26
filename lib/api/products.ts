@@ -2,7 +2,10 @@ import * as z from "zod"
 import { DefaultObject } from "@/types/models";
 import { SubCategory } from "./sub-categories";
 
-const FilterSchema = z.tuple([z.string(), z.number(), z.string()]);
+const FilterSchema = z.object({
+    name: z.string(),
+    value: z.string(),
+})
 
 export const productSchema = z.object({
     name: z.string().min(2).max(200),
@@ -15,7 +18,7 @@ export const productSchema = z.object({
     price: z.coerce.number().positive(),
     status: z.enum(["active", "inactive"]).default("inactive"),
     tags: z.array(z.string()),
-    filters: z.array(FilterSchema),
+    filtersValues: z.array(FilterSchema),
     slug: z.string().default(""),
     description: z.string().default(""),
 })
