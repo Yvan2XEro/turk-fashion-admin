@@ -188,22 +188,24 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
             <FormField
               control={form.control}
               key={filter.id}
-              name="filters"
+              name="filtersValues"
               render={({ field }) => {
-                const value = field.value?.find(([_, id]) => id === filter.id);
+                const value = field.value?.find(
+                  ({ name }) => name === filter.name
+                );
                 return (
                   <FormItem className="flex flex-col">
                     <FormLabel>{filter.name}:</FormLabel>
                     <AppPopoverPicker
-                      value={!!value ? value[2] : undefined}
+                      value={!!value ? value.value : undefined}
                       options={filter.values.map((val) => ({
                         label: val,
                         value: val,
                       }))}
                       onSelect={(value) =>
-                        form.setValue("filters", [
+                        form.setValue("filtersValues", [
                           ...[...(field.value || [])],
-                          [filter.name, filter.id, value],
+                          { name: filter.name, value },
                         ])
                       }
                     />
