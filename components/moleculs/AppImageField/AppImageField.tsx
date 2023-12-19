@@ -5,7 +5,7 @@ import { DropzoneOptions } from "react-dropzone";
 import { SingleImageDropzone } from "../SingleImageDropzone";
 import { AppLoader } from "../AppLoader";
 import { upload } from "@/lib/api/images";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from "react-query";
 import { useToast } from "@/components/ui/use-toast";
 
 type InputProps = {
@@ -46,7 +46,7 @@ function AppImageField(props: InputProps, ref: any) {
   }, [value]);
   return (
     <>
-      {!uploadMutation.isPending ? (
+      {!uploadMutation.isLoading ? (
         <SingleImageDropzone
           {...props}
           ref={ref}

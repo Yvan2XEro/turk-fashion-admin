@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 import React, { PropsWithChildren, useState } from "react";
 
 export default function AppQueryCliantProvider({
@@ -17,7 +17,12 @@ export default function AppQueryCliantProvider({
                   title: "Success!",
                 });
               },
-              onError: (error: any) => {},
+              onError: (error: any) => {
+                toast({
+                  title: "Error",
+                  description: error.message,
+                });
+              },
             },
           },
         })

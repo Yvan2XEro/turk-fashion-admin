@@ -10,7 +10,7 @@ import { EditCategorySheet } from "@/components/organism/EditCategoryForm";
 import { Category } from "@/lib/api/categories";
 import { AppDataTable } from "@/components/organism/AppDataTable";
 import useAppDeleteMutation from "@/hooks/useAppDeleteMutation";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "react-query";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -100,14 +100,7 @@ export default function Page() {
                     },
                     {
                       onSuccess: () => {
-                        client.invalidateQueries({
-                          queryKey: ["categories"],
-                          type: "all",
-                        });
-                        client.refetchQueries({
-                          queryKey: ["categories"],
-                          type: "all",
-                        });
+                        client.invalidateQueries(["categories"]);
                       },
                     }
                   );
@@ -153,14 +146,7 @@ export default function Page() {
                   },
                   {
                     onSuccess(data) {
-                      client.invalidateQueries({
-                        queryKey: ["categories"],
-                        type: "all",
-                      });
-                      client.refetchQueries({
-                        queryKey: ["categories"],
-                        type: "all",
-                      });
+                      client.invalidateQueries(["categories"]);
                     },
                   }
                 );

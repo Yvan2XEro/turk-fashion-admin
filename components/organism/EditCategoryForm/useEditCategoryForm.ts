@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { CategoryPayload } from "@/lib/api/categories";
 import { useToast } from "@/components/ui/use-toast";
 import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
@@ -27,20 +27,14 @@ export default function useEditCategoryForm({ onSubmitSuccess, id }: TProps) {
 
         await mutation.mutateAsync(data, {
             onSuccess: () => {
-                client.invalidateQueries({
-                    queryKey: ["categories"],
-                    type: "all",
-                });
-                client.refetchQueries({
-                    queryKey: ["categories"],
-                    type: "all",
-                });
+                client.invalidateQueries(["categories"]);
+
                 toast({
                     title: "Success!",
                 })
                 onSubmitSuccess()
             },
-            onError: (error) => {
+            onError: (error: any) => {
                 toast({
                     title: "Error",
                     description: error.message

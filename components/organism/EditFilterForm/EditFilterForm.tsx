@@ -34,7 +34,7 @@ export default function EditCategoryForm({
     },
   });
 
-  const { onSubmit, isPending } = useEditFilterForm({
+  const { onSubmit, isLoading } = useEditFilterForm({
     onSubmitSuccess,
     id,
   });
@@ -73,7 +73,7 @@ export default function EditCategoryForm({
             )}
           />
 
-          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
+          {isLoading ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

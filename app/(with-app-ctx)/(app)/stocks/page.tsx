@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@radix-ui/react-label";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -129,14 +129,7 @@ export default function Page() {
                     },
                     {
                       onSuccess: () => {
-                        client.invalidateQueries({
-                          queryKey: ["products-stocks"],
-                          type: "all",
-                        });
-                        client.refetchQueries({
-                          queryKey: ["products-stocks"],
-                          type: "all",
-                        });
+                        client.invalidateQueries(["products-stocks"]);
                       },
                     }
                   );
@@ -182,14 +175,7 @@ export default function Page() {
                   },
                   {
                     onSuccess(data) {
-                      client.invalidateQueries({
-                        queryKey: ["products-stocks"],
-                        type: "all",
-                      });
-                      client.refetchQueries({
-                        queryKey: ["products-stocks"],
-                        type: "all",
-                      });
+                      client.invalidateQueries(["products-stocks"]);
                     },
                   }
                 );

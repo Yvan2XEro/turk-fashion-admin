@@ -18,7 +18,7 @@ import AppImageField from "@/components/moleculs/AppImageField/AppImageField";
 import { AppTagsInput2 } from "@/components/moleculs/AppTagsInput";
 import { Product, ProductPayload, productSchema } from "@/lib/api/products";
 import { universalFetch } from "@/lib/api/universalfetch";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "react-query";
 import { Category } from "@/lib/api/categories";
 import { Filter } from "@/lib/api/filters";
 import { SubCategory } from "@/lib/api/sub-categories";
@@ -90,7 +90,7 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
     );
   }, [selectedSubCategoryid, paginatedSubCategories?.data]);
 
-  const { onSubmit, isPending } = useEditProductForm({
+  const { onSubmit, isLoading } = useEditProductForm({
     onSubmitSuccess,
     id,
   });
@@ -304,7 +304,7 @@ export default function EditProductForm({ data, onSubmitSuccess, id }: TProps) {
               </FormItem>
             )}
           />
-          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
+          {isLoading ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

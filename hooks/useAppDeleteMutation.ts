@@ -1,5 +1,5 @@
 import { deletMultiple } from "@/lib/api/delete-multiple"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation } from "react-query"
 
 
 export default function useAppDeleteMutation() {

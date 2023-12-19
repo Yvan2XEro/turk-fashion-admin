@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "react-query";
 import useAppDeleteMutation from "@/hooks/useAppDeleteMutation";
 import { ColumnDef } from "@tanstack/react-table";
 import { SubCategory } from "@/lib/api/sub-categories";
@@ -100,14 +100,7 @@ export default function Page() {
                     },
                     {
                       onSuccess: () => {
-                        client.invalidateQueries({
-                          queryKey: ["sub-categories"],
-                          type: "all",
-                        });
-                        client.refetchQueries({
-                          queryKey: ["sub-categories"],
-                          type: "all",
-                        });
+                        client.invalidateQueries(["sub-categories"]);
                       },
                     }
                   );
@@ -153,14 +146,7 @@ export default function Page() {
                   },
                   {
                     onSuccess(data) {
-                      client.invalidateQueries({
-                        queryKey: ["sub-categories"],
-                        type: "all",
-                      });
-                      client.refetchQueries({
-                        queryKey: ["sub-categories"],
-                        type: "all",
-                      });
+                      client.invalidateQueries(["sub-categories"]);
                     },
                   }
                 );
