@@ -1,7 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { SubCategoryPayload } from "@/lib/api/sub-categories";
 import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 type TProps = {
     onSubmitSuccess: () => void;
@@ -26,20 +26,14 @@ export default function useEditSubCategoryForm({ onSubmitSuccess, id }: TProps) 
 
         await mutation.mutateAsync(data, {
             onSuccess: () => {
-                client.invalidateQueries({
-                    queryKey: ["sub-categories"],
-                    type: "all",
-                });
-                client.refetchQueries({
-                    queryKey: ["sub-categories"],
-                    type: "all",
-                });
+                client.invalidateQueries(["sub-categories"]);
+
                 toast({
                     title: "Success!",
                 })
                 onSubmitSuccess()
             },
-            onError: (error) => {
+            onError: (error: any) => {
                 toast({
                     title: "Error",
                     description: error.message

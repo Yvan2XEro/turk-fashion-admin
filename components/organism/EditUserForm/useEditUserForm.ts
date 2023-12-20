@@ -1,7 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
 import { UserPayload } from "@/lib/api/users";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 type TProps = {
     onSubmitSuccess: () => void;
@@ -29,20 +29,14 @@ export default function useEditUserForm({ onSubmitSuccess, id }: TProps) {
 
         await mutation.mutateAsync(data, {
             onSuccess: () => {
-                client.invalidateQueries({
-                    queryKey: ["users"],
-                    type: "all",
-                });
-                client.refetchQueries({
-                    queryKey: ["users"],
-                    type: "all",
-                });
+                client.invalidateQueries(["users"]);
+
                 toast({
                     title: "Success!",
                 })
                 onSubmitSuccess()
             },
-            onError: (error) => {
+            onError: (error: any) => {
                 toast({
                     title: "Error",
                     description: error.message

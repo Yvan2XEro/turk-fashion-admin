@@ -34,7 +34,7 @@ export default function EditCategoryForm({
     },
   });
 
-  const { onSubmit, isPending } = useEditProductForm({
+  const { onSubmit, isLoading } = useEditProductForm({
     onSubmitSuccess,
     id,
   });
@@ -76,7 +76,7 @@ export default function EditCategoryForm({
               </FormItem>
             )}
           />
-          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
+          {isLoading ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

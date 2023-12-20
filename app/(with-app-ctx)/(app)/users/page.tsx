@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import useAppDeleteMutation from "@/hooks/useAppDeleteMutation";
 import { fetchWithAuth } from "@/lib/api/app-fetch";
 import { User } from "@/lib/api/users";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical, Plus } from "lucide-react";
 import React from "react";
@@ -36,7 +36,7 @@ export default function Page() {
         description: "User granted admin",
         title: "Success",
       });
-      client.invalidateQueries({ queryKey: ["users"] });
+      client.invalidateQueries(["users"]);
     },
   });
   const columns: ColumnDef<User>[] = [
@@ -121,14 +121,7 @@ export default function Page() {
                     },
                     {
                       onSuccess: () => {
-                        client.invalidateQueries({
-                          queryKey: ["users"],
-                          type: "all",
-                        });
-                        client.refetchQueries({
-                          queryKey: ["users"],
-                          type: "all",
-                        });
+                        client.invalidateQueries(["users"]);
                       },
                     }
                   );
@@ -147,14 +140,7 @@ export default function Page() {
                     return;
                   await grantMutation.mutateAsync(props.row.original.id, {
                     onSuccess: () => {
-                      client.invalidateQueries({
-                        queryKey: ["users", "users/admins/all"],
-                        type: "all",
-                      });
-                      client.refetchQueries({
-                        queryKey: ["users", "users/admins/all"],
-                        type: "all",
-                      });
+                      client.invalidateQueries(["users", "users/admins/all"]);
                     },
                   });
                 }}
@@ -199,14 +185,7 @@ export default function Page() {
                   },
                   {
                     onSuccess(data) {
-                      client.invalidateQueries({
-                        queryKey: ["users"],
-                        type: "all",
-                      });
-                      client.refetchQueries({
-                        queryKey: ["users"],
-                        type: "all",
-                      });
+                      client.invalidateQueries(["users"]);
                     },
                   }
                 );

@@ -1,33 +1,33 @@
 import { useMutation, useQueryClient } from "react-query";
-import { CategoryPayload } from "@/lib/api/categories";
 import { useToast } from "@/components/ui/use-toast";
 import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
+import { CityPayload } from "@/lib/api/cities";
 
 type TProps = {
     onSubmitSuccess: () => void;
     id?: number;
 };
 
-export default function useEditCategoryForm({ onSubmitSuccess, id }: TProps) {
+export default function useEditCityForm({ onSubmitSuccess, id }: TProps) {
 
     const { toast } = useToast()
     const client = useQueryClient();
     const mutation = useMutation({
-        mutationFn: (payload: CategoryPayload) => !id ? universalCreate({
-            path: `/categories`,
+        mutationFn: (payload: CityPayload) => !id ? universalCreate({
+            path: `/deliverables-citties`,
             payload
-        }) : universalUpdate<CategoryPayload>({
-            path: `/categories`,
+        }) : universalUpdate<CityPayload>({
+            path: `/deliverables-citties`,
             id,
             payload
         }),
     })
 
-    async function onSubmit(data: CategoryPayload) {
+    async function onSubmit(data: CityPayload) {
 
         await mutation.mutateAsync(data, {
             onSuccess: () => {
-                client.invalidateQueries(["categories"]);
+                client.refetchQueries(["deliverables-citties"]);
 
                 toast({
                     title: "Success!",

@@ -1,7 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { FilterPayload } from "@/lib/api/filters";
 import { universalCreate, universalUpdate } from "@/lib/api/universalfetch";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 type TProps = {
     onSubmitSuccess: () => void;
@@ -26,20 +26,14 @@ export default function useEditFilterForm({ onSubmitSuccess, id }: TProps) {
 
         await mutation.mutateAsync(data, {
             onSuccess: () => {
-                client.invalidateQueries({
-                    queryKey: ["filters"],
-                    type: "all",
-                });
-                client.refetchQueries({
-                    queryKey: ["filters"],
-                    type: "all",
-                });
+                client.invalidateQueries(["filters"]);
+
                 toast({
                     title: "Success!",
                 })
                 onSubmitSuccess()
             },
-            onError: (error) => {
+            onError: (error: any) => {
                 toast({
                     title: "Error",
                     description: error.message

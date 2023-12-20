@@ -40,7 +40,7 @@ import {
   ChevronsRight,
   Trash,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "react-query";
 import { universalFetch } from "@/lib/api/universalfetch";
 import { AppLoader } from "@/components/moleculs/AppLoader";
 import { DefaultObject } from "@/types/models";

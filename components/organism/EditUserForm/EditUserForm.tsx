@@ -30,7 +30,7 @@ export default function EditUserForm({ data, onSubmitSuccess, id }: TProps) {
     },
   });
 
-  const { onSubmit, isPending } = useEditEditUserForm({
+  const { onSubmit, isLoading } = useEditEditUserForm({
     onSubmitSuccess,
     id,
   });
@@ -102,7 +102,7 @@ export default function EditUserForm({ data, onSubmitSuccess, id }: TProps) {
             )}
           />
 
-          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
+          {isLoading ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>

@@ -20,7 +20,7 @@ import {
   SubCategoryPayload,
   subCategorySchema,
 } from "@/lib/api/sub-categories";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "react-query";
 import { universalFetch } from "@/lib/api/universalfetch";
 import { Category } from "@/lib/api/categories";
 import { Filter } from "@/lib/api/filters";
@@ -48,7 +48,7 @@ export default function EditSubCategoryForm({
     },
   });
 
-  const { onSubmit, isPending } = useEditSubCategoryForm({
+  const { onSubmit, isLoading } = useEditSubCategoryForm({
     onSubmitSuccess,
     id,
   });
@@ -154,7 +154,7 @@ export default function EditSubCategoryForm({
             )}
           />
 
-          {isPending ? <AppLoader /> : <Button type="submit">Submit</Button>}
+          {isLoading ? <AppLoader /> : <Button type="submit">Submit</Button>}
         </form>
       </Form>
     </div>
