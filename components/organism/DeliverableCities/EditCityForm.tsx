@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { AppPopoverPicker } from "@/components/moleculs/AppPopoverPicker";
 import { AppLoader } from "@/components/moleculs/AppLoader";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import countries from "./countrie";
 
 type TProps = {
   data?: City;
@@ -48,7 +50,10 @@ export default function EditCityForm({ onSubmitSuccess, data, id }: TProps) {
                 <FormControl>
                   <AppPopoverPicker
                     value={field.value}
-                    options={[]}
+                    options={countries.map((c) => ({
+                      label: c.name,
+                      value: c.name,
+                    }))}
                     onSelect={(value) => field.onChange(value)}
                   />
                 </FormControl>
@@ -71,12 +76,53 @@ export default function EditCityForm({ onSubmitSuccess, data, id }: TProps) {
           />
           <FormField
             control={form.control}
-            name="lat"
+            name="state"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Latitude</FormLabel>
+                <FormLabel>State</FormLabel>
                 <FormControl>
-                  <Input placeholder="Latitude" {...field} />
+                  <Input placeholder="Name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-col gap-3 md:flex-row">
+            <FormField
+              control={form.control}
+              name="lat"
+              render={({ field }) => (
+                <FormItem className="flex-auto">
+                  <FormLabel>Latitude</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Latitude" type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lng"
+              render={({ field }) => (
+                <FormItem className="flex-auto">
+                  <FormLabel>Longitude</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Longitude" type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="shippingFee"
+            render={({ field }) => (
+              <FormItem className="flex-auto">
+                <FormLabel>Shipping Fee</FormLabel>
+                <FormControl>
+                  <Input placeholder="Shipping Fee" type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,14 +130,18 @@ export default function EditCityForm({ onSubmitSuccess, data, id }: TProps) {
           />
           <FormField
             control={form.control}
-            name="lng"
+            name="isActive"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Longitude</FormLabel>
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
                 <FormControl>
-                  <Input placeholder="Longitude" {...field} />
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
-                <FormMessage />
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Is active</FormLabel>
+                </div>
               </FormItem>
             )}
           />

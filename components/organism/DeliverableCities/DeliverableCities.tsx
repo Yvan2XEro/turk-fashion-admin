@@ -2,10 +2,27 @@
 import React from "react";
 import EditCitySheet from "./EditCitySheet";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useQuery } from "react-query";
+import { fetchWithAuth } from "@/lib/api/app-fetch";
+import { City } from "@/lib/api/cities";
+import CityCard from "./CityCard";
 
 export default function DeliverableCities() {
+  const query = useQuery({
+    queryKey: ["deliverables-citties"],
+    queryFn: async () => {
+      try {
+        const reponse = await fetchWithAuth("/deliverables-citties");
+        const data = await reponse.json();
+        if (reponse.ok) {
+          return data as City[];
+        }
+        return Promise.reject(data);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+  });
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -17,46 +34,9 @@ export default function DeliverableCities() {
       </div>
 
       <div className="flex flex-col gap-3 mt-3">
-        <Card className="p-2 flex items-center justify-between">
-          <div>
-            <h3>Dschang, Cameroon</h3>
-            <p>232.44343, 23.434343</p>
-          </div>
-
-          <div>
-            <Checkbox />
-          </div>
-        </Card>
-        <Card className="p-2 flex items-center justify-between">
-          <div>
-            <h3>Dschang, Cameroon</h3>
-            <p>232.44343, 23.434343</p>
-          </div>
-
-          <div>
-            <Checkbox />
-          </div>
-        </Card>
-        <Card className="p-2 flex items-center justify-between">
-          <div>
-            <h3>Dschang, Cameroon</h3>
-            <p>232.44343, 23.434343</p>
-          </div>
-
-          <div>
-            <Checkbox />
-          </div>
-        </Card>
-        <Card className="p-2 flex items-center justify-between">
-          <div>
-            <h3>Dschang, Cameroon</h3>
-            <p>232.44343, 23.434343</p>
-          </div>
-
-          <div>
-            <Checkbox />
-          </div>
-        </Card>
+        {query.data?.map((city) => (
+          <CityCard key={city.id} data={city} />
+        ))}
       </div>
     </div>
   );
